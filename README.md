@@ -33,12 +33,22 @@ npm run dev            # API on :3000, client on :5173
 | `npm run dev` | Starts the API and the client in watch mode |
 | `npm run build` | Builds both workspaces |
 | `npm run typecheck` | Type-checks both workspaces |
-| `npm test` | Runs the test suites |
+| `npm test` | Runs the test suites (database tests use in-memory PGlite, no server needed) |
+| `npm run db:generate -w server` | Creates a migration from changes to `server/src/db/schema.ts` |
+| `npm run db:migrate -w server` | Applies migrations to `DATABASE_URL` (the server also does this on startup) |
 
 ## Project layout
 
 ```
 client/   React frontend
 server/   Express API
+  drizzle/          SQL migrations (pgvector, tables, append-only trigger on events)
+  src/db/           Drizzle schema and database connection
+  src/events/       Event schemas (Zod) and the event store (appendEvent, readEvents)
   src/extraction/   Claude extraction prompt and fact schema
 ```
+
+## Data model
+
+Story facts are stored with event sourcing. Every change is appended to the `events` table, which the database
+refuses to update. `chapters`, `facts`, and `flags` are projections built from those events.
