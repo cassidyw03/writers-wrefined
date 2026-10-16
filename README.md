@@ -1,6 +1,6 @@
 # Writers Wrefined
 
-A continuity checker for fantasy authors. Upload a chapter, and AI pulls out every story fact and saves it as an event tied to that chapter. The app shows how your world has changed and flags anything that contradicts an earlier chapter.
+A continuity checker for authors. Upload a chapter, and AI pulls out every story fact and saves it as an event tied to that chapter. The app shows how your world has changed and flags anything that contradicts an earlier chapter.
 
 CSE 499 Senior Project, BYU-Idaho, Fall 2026. Cassidy Whitehead Mangum.
 
@@ -43,10 +43,25 @@ npm run dev            # API on :3000, client on :5173
 client/   React frontend
 server/   Express API
   drizzle/          SQL migrations (pgvector, tables, append-only trigger on events)
+  src/chapters/     Chapter routes and service (save chapter, extract facts, record events)
   src/db/           Drizzle schema and database connection
   src/events/       Event schemas (Zod) and the event store (appendEvent, readEvents)
-  src/extraction/   Claude extraction prompt and fact schema
+  src/extraction/   Claude extraction prompt, fact schema, and extractor
 ```
+
+## API
+
+Until auth is added, every chapter goes into one demo book.
+
+| Route | What it does |
+| --- | --- |
+| `GET /api/health` | Reports the API is up |
+| `GET /api/book` | The demo book and its chapters, with a fact count for each |
+| `POST /api/chapters` | Body `{ title?, text, sourceFormat }`. Saves the chapter, extracts its facts with Claude, and returns them. Takes one to two minutes |
+| `GET /api/chapters/:id` | A saved chapter's facts |
+
+Each returned fact has `quoteFound`, which is false when its quote does not appear word for word in the chapter.
+Set `EXTRACTION_MODEL` to try a model other than `claude-sonnet-5`.
 
 ## Data model
 

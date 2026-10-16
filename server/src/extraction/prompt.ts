@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Copied from the extraction spike (writers-wrefined-spike/extract.ts, v3 prompt).
-// Wired into the API in the LLM extraction milestone (Oct 31).
+// Used by extract.ts, which POST /api/chapters calls for each new chapter.
 
 export const FACT_TYPES = ["attribute", "relationship", "event", "knowledge"] as const;
 

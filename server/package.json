@@ -15,6 +15,7 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.131.0",
     "cors": "^2.8.6",
     "drizzle-orm": "^0.45.4",
     "express": "^5.3.0",
