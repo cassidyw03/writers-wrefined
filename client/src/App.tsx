@@ -1,13 +1,53 @@
 import { useEffect, useState } from 'react'
 import { addChapter, getBook, getChapter, getHealth, type Book, type ChapterResult, type FactType } from './api'
+import { authClient } from './authClient'
 import { ChapterForm } from './ChapterForm'
 import { FactList } from './FactList'
+import { LoginForm } from './LoginForm'
 import './App.css'
 
 type ApiStatus = 'checking' | 'online' | 'offline'
 
 function App() {
   const [status, setStatus] = useState<ApiStatus>('checking')
+  const { data: session, isPending } = authClient.useSession()
+
+  useEffect(() => {
+    getHealth()
+      .then((body) => setStatus(body.ok ? 'online' : 'offline'))
+      .catch(() => setStatus('offline'))
+  }, [])
+
+  return (
+    <div className="layout">
+      <header className="site-header">
+        <h1>Writers Wrefined</h1>
+        <p className="tagline">A continuity checker for authors. Technology prototype.</p>
+        <p className={`status status-${status}`}>API: {status}</p>
+        {session && (
+          <p className="account">
+            <span>Logged in as {session.user.name || session.user.email}</span>
+            <button type="button" className="link-button" onClick={() => authClient.signOut()}>
+              Log out
+            </button>
+          </p>
+        )}
+      </header>
+
+      {isPending ? null : session ? (
+        // Keyed by user so logging in as someone else starts with a fresh book.
+        <Workspace key={session.user.id} apiOnline={status === 'online'} />
+      ) : (
+        <main className="content content-wide">
+          <LoginForm />
+        </main>
+      )}
+    </div>
+  )
+}
+
+// The signed-in view: the author's chapters on the side, the chapter form and results in the middle.
+function Workspace({ apiOnline }: { apiOnline: boolean }) {
   const [book, setBook] = useState<Book | null>(null)
   const [result, setResult] = useState<ChapterResult | null>(null)
   const [extracting, setExtracting] = useState(false)
@@ -16,9 +56,6 @@ function App() {
   const refreshBook = () => getBook().then(setBook).catch(() => setBook(null))
 
   useEffect(() => {
-    getHealth()
-      .then((body) => setStatus(body.ok ? 'online' : 'offline'))
-      .catch(() => setStatus('offline'))
     refreshBook()
   }, [])
 
@@ -46,13 +83,7 @@ function App() {
   }
 
   return (
-    <div className="layout">
-      <header className="site-header">
-        <h1>Writers Wrefined</h1>
-        <p className="tagline">A continuity checker for authors. Technology prototype.</p>
-        <p className={`status status-${status}`}>API: {status}</p>
-      </header>
-
+    <>
       <aside className="sidebar">
         <h2>{book?.title ?? 'Chapters'}</h2>
         {book && book.chapters.length === 0 && <p className="muted">No chapters yet.</p>}
@@ -72,7 +103,7 @@ function App() {
       </aside>
 
       <main className="content">
-        <ChapterForm onSubmit={handleSubmit} disabled={extracting || status !== 'online'} />
+        <ChapterForm onSubmit={handleSubmit} disabled={extracting || !apiOnline} />
 
         {extracting && (
           <p className="notice" role="status">
@@ -92,7 +123,7 @@ function App() {
           </section>
         )}
       </main>
-    </div>
+    </>
   )
 }
 

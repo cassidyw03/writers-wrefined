@@ -1,0 +1,27 @@
+.auth-form {
+  max-width: 26rem;
+  margin: 2rem auto;
+}
+
+.link-button {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+/* The login screen has no sidebar, so let it use the full width. */
+.content.content-wide {
+  grid-column: 1 / -1;
+}

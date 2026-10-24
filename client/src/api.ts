@@ -35,6 +35,8 @@ export type ChapterResult = {
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${path}`, {
     ...init,
+    // Sends the session cookie. Only matters if VITE_API_URL points at another origin.
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json', ...init?.headers },
   })
   const body = await res.json().catch(() => ({}))

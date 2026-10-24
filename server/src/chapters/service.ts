@@ -1,19 +1,16 @@
 import { and, asc, eq, isNull, sql } from "drizzle-orm";
 import type { Db } from "../db/client.js";
-import { books, chapters, events, facts, users } from "../db/schema.js";
+import { books, chapters, events, facts } from "../db/schema.js";
 import { appendEvent } from "../events/store.js";
 import { quoteFound, type Extractor } from "../extraction/extract.js";
 
-// Until auth is added, every chapter goes into one demo book owned by one demo user.
-const DEMO_EMAIL = "demo@writerswrefined.local";
-const DEMO_BOOK_TITLE = "Demo book";
+const FIRST_BOOK_TITLE = "My book";
 
-export async function getDemoBook(db: Db) {
-  const [existingUser] = await db.select().from(users).where(eq(users.email, DEMO_EMAIL));
-  const user = existingUser ?? (await db.insert(users).values({ email: DEMO_EMAIL }).returning())[0];
-
-  const [existingBook] = await db.select().from(books).where(eq(books.userId, user.id)).limit(1);
-  return existingBook ?? (await db.insert(books).values({ userId: user.id, title: DEMO_BOOK_TITLE }).returning())[0];
+// Each author gets their own book, created the first time they need one.
+// Choosing between several books (FR2) comes later.
+export async function getUserBook(db: Db, userId: string) {
+  const [existing] = await db.select().from(books).where(eq(books.userId, userId)).orderBy(asc(books.createdAt)).limit(1);
+  return existing ?? (await db.insert(books).values({ userId, title: FIRST_BOOK_TITLE }).returning())[0];
 }
 
 export async function listChapters(db: Db, bookId: string) {
@@ -99,11 +96,13 @@ export async function addChapter(db: Db, extract: Extractor, bookId: string, inp
   };
 }
 
-export async function getChapter(db: Db, chapterId: string) {
+// Pass userId to only find the chapter if it belongs to one of that user's books.
+export async function getChapter(db: Db, chapterId: string, userId?: string) {
   const [chapter] = await db
     .select({ id: chapters.id, number: chapters.number, title: chapters.title, text: chapters.text })
     .from(chapters)
-    .where(eq(chapters.id, chapterId));
+    .innerJoin(books, eq(books.id, chapters.bookId))
+    .where(and(eq(chapters.id, chapterId), userId ? eq(books.userId, userId) : undefined));
   return chapter;
 }
 

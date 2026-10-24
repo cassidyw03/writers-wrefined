@@ -3,7 +3,7 @@ import { Router } from "express";
 import { z } from "zod";
 import type { Db } from "../db/client.js";
 import { ExtractionError, type Extractor } from "../extraction/extract.js";
-import { addChapter, getChapter, getChapterFacts, getDemoBook, listChapters } from "./service.js";
+import { addChapter, getChapter, getChapterFacts, getUserBook, listChapters } from "./service.js";
 
 const NewChapterBody = z.object({
   title: z.string().trim().min(1).max(200).optional(),
@@ -15,7 +15,7 @@ export function chapterRoutes(db: Db, extract: Extractor) {
   const router = Router();
 
   router.get("/book", async (_req, res) => {
-    const book = await getDemoBook(db);
+    const book = await getUserBook(db, res.locals.user.id);
     res.json({ id: book.id, title: book.title, chapters: await listChapters(db, book.id) });
   });
 
@@ -26,7 +26,7 @@ export function chapterRoutes(db: Db, extract: Extractor) {
       return;
     }
 
-    const book = await getDemoBook(db);
+    const book = await getUserBook(db, res.locals.user.id);
     try {
       res.status(201).json(await addChapter(db, extract, book.id, body.data));
     } catch (error) {
@@ -44,7 +44,7 @@ export function chapterRoutes(db: Db, extract: Extractor) {
 
   router.get("/chapters/:id", async (req, res) => {
     const parsed = z.uuid().safeParse(req.params.id);
-    const chapter = parsed.success ? await getChapter(db, parsed.data) : undefined;
+    const chapter = parsed.success ? await getChapter(db, parsed.data, res.locals.user.id) : undefined;
     if (!chapter) {
       res.status(404).json({ error: "Chapter not found" });
       return;

@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+  boolean,
   index,
   integer,
   jsonb,
@@ -36,12 +37,77 @@ export const flagStatus = pgEnum("flag_status", ["open", "accepted", "dismissed"
 
 const createdAt = () => timestamp("created_at", { withTimezone: true }).notNull().defaultNow();
 
-// Placeholder until the auth library is chosen (Oct 17); it may add its own columns or tables.
+const updatedAt = () =>
+  timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date());
+
+// Auth tables, managed by Better Auth (src/auth.ts). Column names follow Better Auth's core schema.
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull().default(""),
   email: text("email").notNull().unique(),
+  emailVerified: boolean("email_verified").notNull().default(false),
+  image: text("image"),
   createdAt: createdAt(),
+  updatedAt: updatedAt(),
 });
+
+export const sessions = pgTable(
+  "sessions",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    token: text("token").notNull().unique(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    ipAddress: text("ip_address"),
+    userAgent: text("user_agent"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [index("sessions_user_idx").on(t.userId)],
+);
+
+// One row per way a user can sign in. For email and password, providerId is "credential"
+// and `password` holds the hash.
+export const accounts = pgTable(
+  "accounts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    accountId: text("account_id").notNull(),
+    providerId: text("provider_id").notNull(),
+    accessToken: text("access_token"),
+    refreshToken: text("refresh_token"),
+    idToken: text("id_token"),
+    accessTokenExpiresAt: timestamp("access_token_expires_at", { withTimezone: true }),
+    refreshTokenExpiresAt: timestamp("refresh_token_expires_at", { withTimezone: true }),
+    scope: text("scope"),
+    password: text("password"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [index("accounts_user_idx").on(t.userId)],
+);
+
+// Short-lived tokens (email verification, password reset). Unused until those features are added.
+export const verifications = pgTable(
+  "verifications",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    identifier: text("identifier").notNull(),
+    value: text("value").notNull(),
+    expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [index("verifications_identifier_idx").on(t.identifier)],
+);
 
 export const books = pgTable(
   "books",
