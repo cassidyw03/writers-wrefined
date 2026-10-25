@@ -14,6 +14,10 @@ if (process.env.DATABASE_URL) {
   console.warn("DATABASE_URL is not set; skipping migrations and chapter routes");
 }
 
+if (!process.env.ANTHROPIC_API_KEY) {
+  console.warn("ANTHROPIC_API_KEY is not set; chapter extraction will fail until it is");
+}
+
 const app = createApp({ db, extract: createClaudeExtractor() });
 
 // Extraction can take a minute or more, so allow long requests.
