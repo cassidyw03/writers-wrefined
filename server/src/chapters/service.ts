@@ -1,7 +1,8 @@
-import { and, asc, eq, isNull, sql } from "drizzle-orm";
+import { and, asc, cosineDistance, eq, isNotNull, isNull, lt, sql } from "drizzle-orm";
 import type { Db } from "../db/client.js";
 import { books, chapters, events, facts } from "../db/schema.js";
 import { appendEvent } from "../events/store.js";
+import { factText, type Embedder } from "../embeddings/embed.js";
 import { quoteFound, type Extractor } from "../extraction/extract.js";
 
 const FIRST_BOOK_TITLE = "My book";
@@ -35,7 +36,8 @@ export type NewChapter = {
 
 // Saves the chapter, asks Claude for its facts, and records each one as a FactExtracted event.
 // The chapter is saved before extraction runs, so a failed extraction still leaves the chapter on record.
-export async function addChapter(db: Db, extract: Extractor, bookId: string, input: NewChapter) {
+// With an embedder, each fact's vector is saved too, so later chapters can be checked against it.
+export async function addChapter(db: Db, extract: Extractor, bookId: string, input: NewChapter, embed?: Embedder) {
   const [{ next }] = await db
     .select({ next: sql<number>`coalesce(max(${chapters.number}), 0) + 1` })
     .from(chapters)
@@ -58,6 +60,7 @@ export async function addChapter(db: Db, extract: Extractor, bookId: string, inp
   const result = await extract(input.text);
   const seconds = (Date.now() - started) / 1000;
 
+  const saved: { id: string; text: string }[] = [];
   for (const fact of result.facts) {
     // Skip facts with a blank field rather than failing the whole chapter on one bad fact.
     if (![fact.subject, fact.attribute, fact.value, fact.quote].every((s) => s.trim())) continue;
@@ -82,7 +85,10 @@ export async function addChapter(db: Db, extract: Extractor, bookId: string, inp
       value: fact.value,
       quote: fact.quote,
     });
+    saved.push({ id: event.id, text: factText(fact) });
   }
+
+  if (embed && saved.length > 0) await embedFacts(db, embed, saved);
 
   return {
     chapter: { id: chapter.id, number: chapter.number, title: chapter.title },
@@ -128,4 +134,51 @@ export async function getChapterFacts(db: Db, chapterId: string) {
     quote: f.quote,
     quoteFound: quoteFound(chapter.text, f.quote),
   }));
+}
+
+// Saves a vector for each fact. A Voyage failure is logged, not thrown: the chapter and its facts are
+// already saved, and facts without a vector are simply skipped by findRelatedFacts.
+async function embedFacts(db: Db, embed: Embedder, saved: { id: string; text: string }[]) {
+  let vectors: number[][];
+  try {
+    vectors = await embed(saved.map((f) => f.text), "document");
+  } catch (error) {
+    console.error("Embedding failed; facts were saved without vectors", error);
+    return;
+  }
+  await db.transaction(async (tx) => {
+    for (const [i, fact] of saved.entries()) {
+      await tx.update(facts).set({ embedding: vectors[i] }).where(eq(facts.eventId, fact.id));
+    }
+  });
+}
+
+// The facts from earlier chapters that sit closest to this one in vector space, nearest first.
+// This is what the continuity checker will compare a new fact against. Only finds the fact if userId owns its book.
+export async function findRelatedFacts(db: Db, factId: string, userId: string, limit = 5) {
+  const [fact] = await db
+    .select({ bookId: facts.bookId, chapterNumber: facts.chapterNumber, embedding: facts.embedding })
+    .from(facts)
+    .innerJoin(books, eq(books.id, facts.bookId))
+    .where(and(eq(facts.eventId, factId), eq(books.userId, userId)));
+  if (!fact?.embedding) return [];
+
+  const distance = cosineDistance(facts.embedding, fact.embedding);
+  const rows = await db
+    .select({
+      id: facts.eventId,
+      chapterNumber: facts.chapterNumber,
+      subject: facts.subject,
+      attribute: facts.attribute,
+      value: facts.value,
+      quote: facts.quote,
+      distance,
+    })
+    .from(facts)
+    .where(and(eq(facts.bookId, fact.bookId), lt(facts.chapterNumber, fact.chapterNumber), isNotNull(facts.embedding)))
+    .orderBy(distance)
+    .limit(limit);
+
+  // Cosine similarity is 1 - distance: 1 means pointing the same way, 0 means unrelated.
+  return rows.map(({ distance, ...row }) => ({ ...row, similarity: Number((1 - Number(distance)).toFixed(3)) }));
 }

@@ -7,6 +7,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { createApp } from "../app.js";
 import { MIGRATIONS_FOLDER, type Db } from "../db/client.js";
 import * as schema from "../db/schema.js";
+import type { Embedder } from "../embeddings/embed.js";
 import { readEvents } from "../events/store.js";
 import { ExtractionError, type Extractor } from "../extraction/extract.js";
 
@@ -16,6 +17,7 @@ const CHAPTER =
 let client: PGlite;
 let db: Db;
 let extract: Extractor;
+let embed: Embedder;
 // A signed-in browser: supertest's agent keeps the session cookie between requests.
 let author: Agent;
 let app: ReturnType<typeof createApp>;
@@ -50,7 +52,7 @@ beforeAll(async () => {
   const pgliteDb = drizzle(client, { schema });
   await migrate(pgliteDb, { migrationsFolder: MIGRATIONS_FOLDER });
   db = pgliteDb;
-  app = createApp({ db, extract: (text) => extract(text) });
+  app = createApp({ db, extract: (text) => extract(text), embed: (texts, type) => embed(texts, type) });
 });
 
 afterAll(async () => {
@@ -65,9 +67,27 @@ async function signUp(email: string) {
   return agent;
 }
 
+// Stands in for Voyage: "subject: attribute" sets one strong dimension and the value a weaker one,
+// so facts about the same thing come out similar even when their values differ.
+const fakeEmbedder: Embedder = async (texts) =>
+  texts.map((text) => {
+    const [subject, attribute, value] = text.split(": ");
+    const v = new Array<number>(schema.EMBEDDING_DIMENSIONS).fill(0);
+    v[hash(`${subject}: ${attribute}`)] += 1;
+    v[hash(value)] += 0.5;
+    return v;
+  });
+
+function hash(s: string) {
+  let h = 0;
+  for (const c of s) h = (h * 31 + c.charCodeAt(0)) % schema.EMBEDDING_DIMENSIONS;
+  return h;
+}
+
 beforeEach(async () => {
   await db.delete(schema.users);
   extract = fakeExtractor;
+  embed = fakeEmbedder;
   author = await signUp("author@example.com");
 });
 
@@ -165,5 +185,52 @@ describe("logins", () => {
     const res = await request(app).post("/api/auth/sign-in/email").send({ email: "author@example.com", password: "wrong password" });
 
     expect(res.status).toBe(401);
+  });
+});
+
+describe("embeddings", () => {
+  it("saves a vector for every fact", async () => {
+    await author.post("/api/chapters").send({ text: CHAPTER });
+
+    const rows = await db.select({ embedding: schema.facts.embedding }).from(schema.facts);
+    expect(rows).toHaveLength(2);
+    expect(rows.every((r) => r.embedding?.length === schema.EMBEDDING_DIMENSIONS)).toBe(true);
+  });
+
+  it("still saves the chapter and facts when embedding fails", async () => {
+    embed = async () => {
+      throw new Error("Voyage is down");
+    };
+
+    const res = await author.post("/api/chapters").send({ text: CHAPTER });
+
+    expect(res.status).toBe(201);
+    expect(res.body.facts).toHaveLength(2);
+    const rows = await db.select({ embedding: schema.facts.embedding }).from(schema.facts);
+    expect(rows.every((r) => r.embedding === null)).toBe(true);
+  });
+
+  it("finds the closest facts from earlier chapters only", async () => {
+    await author.post("/api/chapters").send({ text: CHAPTER });
+    const second = await author.post("/api/chapters").send({ text: CHAPTER });
+    const skin = second.body.facts.find((f: { attribute: string }) => f.attribute === "skin");
+
+    const res = await author.get(`/api/facts/${skin.id}/related`);
+
+    expect(res.status).toBe(200);
+    expect(res.body.related).toHaveLength(2);
+    expect(res.body.related.every((f: { chapterNumber: number }) => f.chapterNumber === 1)).toBe(true);
+    expect(res.body.related[0]).toMatchObject({ subject: "Heathcliff", attribute: "skin", similarity: 1 });
+    expect(res.body.related[1].similarity).toBeLessThan(1);
+  });
+
+  it("does not search another author's facts", async () => {
+    await author.post("/api/chapters").send({ text: CHAPTER });
+    const second = await author.post("/api/chapters").send({ text: CHAPTER });
+    const other = await signUp("other@example.com");
+
+    const res = await other.get(`/api/facts/${second.body.facts[0].id}/related`);
+
+    expect(res.body.related).toEqual([]);
   });
 });

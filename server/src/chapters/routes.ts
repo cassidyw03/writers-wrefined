@@ -2,8 +2,9 @@ import Anthropic from "@anthropic-ai/sdk";
 import { Router } from "express";
 import { z } from "zod";
 import type { Db } from "../db/client.js";
+import type { Embedder } from "../embeddings/embed.js";
 import { ExtractionError, type Extractor } from "../extraction/extract.js";
-import { addChapter, getChapter, getChapterFacts, getUserBook, listChapters } from "./service.js";
+import { addChapter, findRelatedFacts, getChapter, getChapterFacts, getUserBook, listChapters } from "./service.js";
 
 const NewChapterBody = z.object({
   title: z.string().trim().min(1).max(200).optional(),
@@ -11,7 +12,7 @@ const NewChapterBody = z.object({
   sourceFormat: z.enum(["paste", "docx", "md"]).default("paste"),
 });
 
-export function chapterRoutes(db: Db, extract: Extractor) {
+export function chapterRoutes(db: Db, extract: Extractor, embed?: Embedder) {
   const router = Router();
 
   router.get("/book", async (_req, res) => {
@@ -28,7 +29,7 @@ export function chapterRoutes(db: Db, extract: Extractor) {
 
     const book = await getUserBook(db, res.locals.user.id);
     try {
-      res.status(201).json(await addChapter(db, extract, book.id, body.data));
+      res.status(201).json(await addChapter(db, extract, book.id, body.data, embed));
     } catch (error) {
       if (error instanceof ExtractionError) {
         res.status(502).json({ error: error.message });
@@ -53,6 +54,12 @@ export function chapterRoutes(db: Db, extract: Extractor) {
       chapter: { id: chapter.id, number: chapter.number, title: chapter.title },
       facts: await getChapterFacts(db, chapter.id),
     });
+  });
+
+  // Earlier facts most similar to this one. Groundwork for the continuity checker; empty until facts have vectors.
+  router.get("/facts/:id/related", async (req, res) => {
+    const parsed = z.uuid().safeParse(req.params.id);
+    res.json({ related: parsed.success ? await findRelatedFacts(db, parsed.data, res.locals.user.id) : [] });
   });
 
   return router;

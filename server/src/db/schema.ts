@@ -182,11 +182,15 @@ export const facts = pgTable(
     attribute: text("attribute").notNull(),
     value: text("value").notNull(),
     quote: text("quote").notNull(),
-    // Filled in by the embeddings milestone (Nov 7).
+    // Voyage embedding of factText(fact). Null if embedding failed or no Voyage key was set.
     embedding: vector("embedding", { dimensions: EMBEDDING_DIMENSIONS }),
     createdAt: createdAt(),
   },
-  (t) => [index("facts_book_subject_attribute_idx").on(t.bookId, t.subject, t.attribute)],
+  (t) => [
+    index("facts_book_subject_attribute_idx").on(t.bookId, t.subject, t.attribute),
+    // Approximate nearest-neighbor index for cosine similarity search (findRelatedFacts).
+    index("facts_embedding_idx").using("hnsw", t.embedding.op("vector_cosine_ops")),
+  ],
 );
 
 export const flags = pgTable(

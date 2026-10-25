@@ -1,5 +1,6 @@
 import { createApp } from "./app.js";
 import { connect, runMigrations } from "./db/client.js";
+import { createVoyageEmbedder } from "./embeddings/embed.js";
 import { createClaudeExtractor } from "./extraction/extract.js";
 
 const port = Number(process.env.PORT ?? 3000);
@@ -18,7 +19,14 @@ if (!process.env.ANTHROPIC_API_KEY) {
   console.warn("ANTHROPIC_API_KEY is not set; chapter extraction will fail until it is");
 }
 
-const app = createApp({ db, extract: createClaudeExtractor() });
+let embed;
+if (process.env.VOYAGE_API_KEY) {
+  embed = createVoyageEmbedder();
+} else {
+  console.warn("VOYAGE_API_KEY is not set; facts will be saved without embeddings");
+}
+
+const app = createApp({ db, extract: createClaudeExtractor(), embed });
 
 // Extraction can take a minute or more, so allow long requests.
 const server = app.listen(port, () => {
