@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx --env-file-if-exists=../.env src/db/migrate.ts",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:clear-test-data": "tsx --env-file-if-exists=../.env src/db/clear-test-data-cli.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",
