@@ -3,6 +3,7 @@ import { addChapter, getBook, getChapter, getHealth, type Book, type ChapterResu
 import { authClient } from './authClient'
 import { ChapterForm } from './ChapterForm'
 import { FactList } from './FactList'
+import { FlagList } from './FlagList'
 import { LoginForm } from './LoginForm'
 import './App.css'
 
@@ -107,7 +108,8 @@ function Workspace({ apiOnline }: { apiOnline: boolean }) {
 
         {extracting && (
           <p className="notice" role="status">
-            Claude is reading the chapter and pulling out facts. This usually takes one to two minutes.
+            Claude is reading the chapter, pulling out facts, and checking them against earlier chapters. This usually
+            takes two to three minutes.
           </p>
         )}
         {error && <p className="notice notice-error" role="alert">{error}</p>}
@@ -119,6 +121,7 @@ function Workspace({ apiOnline }: { apiOnline: boolean }) {
               {result.chapter.title ? `: ${result.chapter.title}` : ''}
             </h2>
             <Summary result={result} />
+            <FlagList flags={result.flags} check={result.check} />
             <FactList facts={result.facts} />
           </section>
         )}

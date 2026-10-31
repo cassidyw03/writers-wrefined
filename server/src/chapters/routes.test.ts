@@ -5,6 +5,7 @@ import { migrate } from "drizzle-orm/pglite/migrator";
 import request, { type Agent } from "supertest";
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { createApp } from "../app.js";
+import type { Checker, FactPair, Verdict } from "../checking/check.js";
 import { MIGRATIONS_FOLDER, type Db } from "../db/client.js";
 import * as schema from "../db/schema.js";
 import type { Embedder } from "../embeddings/embed.js";
@@ -18,6 +19,9 @@ let client: PGlite;
 let db: Db;
 let extract: Extractor;
 let embed: Embedder;
+let check: Checker;
+// The pairs each continuity check was asked about, one entry per call.
+let checkCalls: FactPair[][];
 // A signed-in browser: supertest's agent keeps the session cookie between requests.
 let author: Agent;
 let app: ReturnType<typeof createApp>;
@@ -52,7 +56,12 @@ beforeAll(async () => {
   const pgliteDb = drizzle(client, { schema });
   await migrate(pgliteDb, { migrationsFolder: MIGRATIONS_FOLDER });
   db = pgliteDb;
-  app = createApp({ db, extract: (text) => extract(text), embed: (texts, type) => embed(texts, type) });
+  app = createApp({
+    db,
+    extract: (text) => extract(text),
+    embed: (texts, type) => embed(texts, type),
+    check: (chapter, pairs) => check(chapter, pairs),
+  });
 });
 
 afterAll(async () => {
@@ -84,10 +93,38 @@ function hash(s: string) {
   return h;
 }
 
+// Stands in for Claude's continuity check: gives every pair the same verdict and records what it was asked.
+function fakeChecker(verdict: Verdict["verdict"]): Checker {
+  return async (_chapter, pairs) => {
+    checkCalls.push(pairs);
+    return {
+      model: "fake-model",
+      inputTokens: 100,
+      outputTokens: 20,
+      verdicts: pairs.map((p, i) => ({
+        pair: i,
+        verdict,
+        reason: `Chapter ${p.earlierFact.chapterNumber} says ${p.earlierFact.value}, chapter ${p.newFact.chapterNumber} says ${p.newFact.value}.`,
+      })),
+    };
+  };
+}
+
+// The same facts as fakeExtractor, except the eyes are blue.
+const blueEyesExtractor: Extractor = async (text) => {
+  const result = await fakeExtractor(text);
+  const facts = result.facts.map((f) =>
+    f.attribute === "eye color" ? { ...f, value: "blue", quote: "His blue eyes withdrew suspiciously." } : f,
+  );
+  return { ...result, facts };
+};
+
 beforeEach(async () => {
   await db.delete(schema.users);
   extract = fakeExtractor;
   embed = fakeEmbedder;
+  check = fakeChecker("consistent");
+  checkCalls = [];
   author = await signUp("author@example.com");
 });
 
@@ -232,5 +269,93 @@ describe("embeddings", () => {
     const res = await other.get(`/api/facts/${second.body.facts[0].id}/related`);
 
     expect(res.body.related).toEqual([]);
+  });
+});
+
+describe("continuity check", () => {
+  it("does not run on the first chapter", async () => {
+    const res = await author.post("/api/chapters").send({ text: CHAPTER });
+
+    expect(checkCalls).toEqual([]);
+    expect(res.body.flags).toEqual([]);
+  });
+
+  it("only asks about similar facts that differ", async () => {
+    await author.post("/api/chapters").send({ text: CHAPTER });
+    extract = blueEyesExtractor;
+
+    const res = await author.post("/api/chapters").send({ text: CHAPTER });
+
+    // The skin fact is identical in both chapters, so only the eye colors are compared.
+    expect(checkCalls).toHaveLength(1);
+    expect(checkCalls[0]).toHaveLength(1);
+    expect(checkCalls[0][0].earlierFact).toMatchObject({ chapterNumber: 1, attribute: "eye color", value: "black" });
+    expect(checkCalls[0][0].newFact).toMatchObject({ chapterNumber: 2, attribute: "eye color", value: "blue" });
+    expect(res.body.check).toEqual({ pairsChecked: 1, flagsRaised: 0, stateChanges: 0 });
+  });
+
+  it("flags a contradiction with both facts side by side", async () => {
+    await author.post("/api/chapters").send({ text: CHAPTER });
+    extract = blueEyesExtractor;
+    check = fakeChecker("contradiction");
+
+    const res = await author.post("/api/chapters").send({ text: CHAPTER });
+
+    expect(res.status).toBe(201);
+    expect(res.body.flags).toHaveLength(1);
+    expect(res.body.flags[0]).toMatchObject({
+      status: "open",
+      explanation: "Chapter 1 says black, chapter 2 says blue.",
+      earlierFact: { chapterNumber: 1, value: "black", quote: "His black eyes withdrew suspiciously." },
+      newFact: { chapterNumber: 2, value: "blue", quote: "His blue eyes withdrew suspiciously." },
+    });
+
+    const events = await readEvents(db, (await author.get("/api/book")).body.id);
+    expect(events.filter((e) => e.type === "FlagRaised")).toHaveLength(1);
+
+    const all = await author.get("/api/flags");
+    expect(all.body.flags.map((f: { id: string }) => f.id)).toEqual([res.body.flags[0].id]);
+    const chapter = await author.get(`/api/chapters/${res.body.chapter.id}`);
+    expect(chapter.body.flags).toHaveLength(1);
+  });
+
+  it("records an explained change as a state change, not a flag", async () => {
+    await author.post("/api/chapters").send({ text: CHAPTER });
+    extract = blueEyesExtractor;
+    check = fakeChecker("state_change");
+
+    const res = await author.post("/api/chapters").send({ text: CHAPTER });
+
+    expect(res.body.flags).toEqual([]);
+    expect(res.body.check).toMatchObject({ flagsRaised: 0, stateChanges: 1 });
+    const events = await readEvents(db, (await author.get("/api/book")).body.id);
+    const changed = events.find((e) => e.type === "StateChanged");
+    expect(changed?.data).toMatchObject({ reason: "Chapter 1 says black, chapter 2 says blue." });
+  });
+
+  it("still saves the chapter when the check fails", async () => {
+    await author.post("/api/chapters").send({ text: CHAPTER });
+    extract = blueEyesExtractor;
+    check = async () => {
+      throw new Error("Claude is down");
+    };
+
+    const res = await author.post("/api/chapters").send({ text: CHAPTER });
+
+    expect(res.status).toBe(201);
+    expect(res.body.facts).toHaveLength(2);
+    expect(res.body.check).toBeNull();
+  });
+
+  it("does not show another author's flags", async () => {
+    await author.post("/api/chapters").send({ text: CHAPTER });
+    extract = blueEyesExtractor;
+    check = fakeChecker("contradiction");
+    await author.post("/api/chapters").send({ text: CHAPTER });
+    const other = await signUp("other@example.com");
+
+    const res = await other.get("/api/flags");
+
+    expect(res.body.flags).toEqual([]);
   });
 });

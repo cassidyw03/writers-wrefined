@@ -3,6 +3,7 @@ import cors from "cors";
 import express, { type ErrorRequestHandler } from "express";
 import { createAuth, requireUser } from "./auth.js";
 import { chapterRoutes } from "./chapters/routes.js";
+import type { Checker } from "./checking/check.js";
 import type { Db } from "./db/client.js";
 import type { Embedder } from "./embeddings/embed.js";
 import type { Extractor } from "./extraction/extract.js";
@@ -11,9 +12,10 @@ export type AppDeps = {
   db?: Db;
   extract?: Extractor;
   embed?: Embedder;
+  check?: Checker;
 };
 
-export function createApp({ db, extract, embed }: AppDeps = {}) {
+export function createApp({ db, extract, embed, check }: AppDeps = {}) {
   const app = express();
 
   app.use(cors({ origin: process.env.CLIENT_ORIGIN ?? true, credentials: true }));
@@ -27,7 +29,7 @@ export function createApp({ db, extract, embed }: AppDeps = {}) {
     // Better Auth reads the raw request body, so it is mounted before express.json().
     app.all("/api/auth/{*any}", toNodeHandler(auth));
     app.use(express.json({ limit: "2mb" }));
-    app.use("/api", requireUser(auth), chapterRoutes(db, extract, embed));
+    app.use("/api", requireUser(auth), chapterRoutes(db, extract, embed, check));
   }
 
   const onError: ErrorRequestHandler = (error, _req, res, _next) => {

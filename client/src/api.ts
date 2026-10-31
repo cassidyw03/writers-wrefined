@@ -26,10 +26,30 @@ export type Book = {
   chapters: ChapterSummary[]
 }
 
+export type FlagFact = {
+  id: string
+  chapterNumber: number
+  subject: string
+  attribute: string
+  value: string
+  quote: string
+}
+
+export type Flag = {
+  id: string
+  status: 'open' | 'accepted' | 'dismissed'
+  explanation: string
+  newFact: FlagFact
+  earlierFact: FlagFact
+}
+
 export type ChapterResult = {
   chapter: { id: string; number: number; title: string | null }
   facts: Fact[]
+  flags: Flag[]
   stats?: { model: string; inputTokens: number; outputTokens: number; seconds: number }
+  // Only right after adding a chapter. Null when the check could not run.
+  check?: { pairsChecked: number; flagsRaised: number; stateChanges: number } | null
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {

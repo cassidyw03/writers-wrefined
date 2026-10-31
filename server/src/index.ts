@@ -1,4 +1,5 @@
 import { createApp } from "./app.js";
+import { createClaudeChecker } from "./checking/check.js";
 import { connect, runMigrations } from "./db/client.js";
 import { createVoyageEmbedder } from "./embeddings/embed.js";
 import { createClaudeExtractor } from "./extraction/extract.js";
@@ -23,10 +24,10 @@ let embed;
 if (process.env.VOYAGE_API_KEY) {
   embed = createVoyageEmbedder();
 } else {
-  console.warn("VOYAGE_API_KEY is not set; facts will be saved without embeddings");
+  console.warn("VOYAGE_API_KEY is not set; facts will be saved without embeddings or continuity checks");
 }
 
-const app = createApp({ db, extract: createClaudeExtractor(), embed });
+const app = createApp({ db, extract: createClaudeExtractor(), embed, check: createClaudeChecker() });
 
 // Extraction can take a minute or more, so allow long requests.
 const server = app.listen(port, () => {

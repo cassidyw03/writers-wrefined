@@ -1,10 +1,19 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { Router } from "express";
 import { z } from "zod";
+import type { Checker } from "../checking/check.js";
 import type { Db } from "../db/client.js";
 import type { Embedder } from "../embeddings/embed.js";
 import { ExtractionError, type Extractor } from "../extraction/extract.js";
-import { addChapter, findRelatedFacts, getChapter, getChapterFacts, getUserBook, listChapters } from "./service.js";
+import {
+  addChapter,
+  findRelatedFacts,
+  getChapter,
+  getChapterFacts,
+  getUserBook,
+  listChapters,
+  listFlags,
+} from "./service.js";
 
 const NewChapterBody = z.object({
   title: z.string().trim().min(1).max(200).optional(),
@@ -12,7 +21,7 @@ const NewChapterBody = z.object({
   sourceFormat: z.enum(["paste", "docx", "md"]).default("paste"),
 });
 
-export function chapterRoutes(db: Db, extract: Extractor, embed?: Embedder) {
+export function chapterRoutes(db: Db, extract: Extractor, embed?: Embedder, check?: Checker) {
   const router = Router();
 
   router.get("/book", async (_req, res) => {
@@ -29,7 +38,7 @@ export function chapterRoutes(db: Db, extract: Extractor, embed?: Embedder) {
 
     const book = await getUserBook(db, res.locals.user.id);
     try {
-      res.status(201).json(await addChapter(db, extract, book.id, body.data, embed));
+      res.status(201).json(await addChapter(db, extract, book.id, body.data, embed, check));
     } catch (error) {
       if (error instanceof ExtractionError) {
         res.status(502).json({ error: error.message });
@@ -53,7 +62,14 @@ export function chapterRoutes(db: Db, extract: Extractor, embed?: Embedder) {
     res.json({
       chapter: { id: chapter.id, number: chapter.number, title: chapter.title },
       facts: await getChapterFacts(db, chapter.id),
+      flags: await listFlags(db, chapter.bookId, chapter.id),
     });
+  });
+
+  // Every flag in the author's book, with both facts for a side-by-side view.
+  router.get("/flags", async (_req, res) => {
+    const book = await getUserBook(db, res.locals.user.id);
+    res.json({ flags: await listFlags(db, book.id) });
   });
 
   // Earlier facts most similar to this one. Groundwork for the continuity checker; empty until facts have vectors.

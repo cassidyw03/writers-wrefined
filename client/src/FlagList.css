@@ -1,0 +1,56 @@
+.flags {
+  margin: 1rem 0 1.5rem;
+}
+
+.flags ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* Flags use the same clay red as warnings so they stand out from the sage fact cards. */
+.flag {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid #b5473a;
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.flag-reason {
+  margin: 0 0 0.75rem;
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.flag-sides {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.flag-side {
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.flag-side p {
+  margin: 0 0 0.3rem;
+}
+
+.flag-side blockquote {
+  margin: 0.4rem 0 0;
+  padding-left: 0.8rem;
+  border-left: 3px solid var(--sage-winter);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .flag-sides {
+    grid-template-columns: 1fr;
+  }
+}
