@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// Copied from the extraction spike (writers-wrefined-spike/extract.ts, v3 prompt).
+// v4 prompt: the spike's v3 prompt (writers-wrefined-spike/extract.ts) plus a rule that keeps named minor characters.
 // Used by extract.ts, which POST /api/chapters calls for each new chapter.
 
 export const FACT_TYPES = ["attribute", "relationship", "event", "knowledge"] as const;
@@ -62,6 +62,7 @@ knowledge
 Rules:
 - Only record facts the text actually states. Do not infer or guess.
 - Capture every fact about characters that a later chapter could contradict, including small physical details.
-- For objects and places, only record facts likely to matter again in the story. Skip incidental scenery and furniture details.
+- Every named entity in the chapter gets at least one fact, even if it appears only once or is only mentioned: minor characters, named animals, ships, places, and objects. Record who or what it is, such as an occupation, a relationship, or a setting. A later chapter can contradict a one-line mention.
+- For unnamed objects and places, only record facts likely to matter again in the story. Skip incidental scenery and furniture details.
 - Use each entity's name as the subject when the text makes clear who is meant, not "my landlord" or "the narrator".
 - Every fact must include the exact quote it came from, copied word for word, including the original punctuation. Do not shorten or join sentences with "...".`;

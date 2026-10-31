@@ -57,6 +57,7 @@ export function createClaudeExtractor(model = process.env.EXTRACTION_MODEL ?? DE
 const normalize = (s: string) => s.replace(/[“”"‘’'_]/g, "").replace(/\s+/g, " ").trim();
 
 // True when the fact's quote really appears in the chapter (catches invented quotes).
+// Punctuation at the end of the quote is ignored, since Claude sometimes ends a partial sentence with a period.
 export function quoteFound(chapterText: string, quote: string): boolean {
-  return normalize(chapterText).includes(normalize(quote));
+  return normalize(chapterText).includes(normalize(quote).replace(/[.,;:!?—-]+$/, ""));
 }
