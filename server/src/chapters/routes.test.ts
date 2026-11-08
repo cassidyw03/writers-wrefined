@@ -427,3 +427,79 @@ describe("PATCH /api/flags/:id", () => {
     expect(row.status).toBe("open");
   });
 });
+
+describe("books (FR2)", () => {
+  it("gives a new author one book to start with", async () => {
+    const res = await author.get("/api/books");
+
+    expect(res.status).toBe(200);
+    expect(res.body.books).toHaveLength(1);
+    expect(res.body.books[0]).toMatchObject({ title: "My book", chapterCount: 0 });
+  });
+
+  it("creates a book with a title", async () => {
+    const res = await author.post("/api/books").send({ title: "  The Ember Crown  " });
+
+    expect(res.status).toBe(201);
+    expect(res.body).toMatchObject({ title: "The Ember Crown", chapters: [] });
+    const all = await author.get("/api/books");
+    // "My book" is only made for an author with no books, so it does not appear here.
+    expect(all.body.books.map((b: { title: string }) => b.title)).toEqual(["The Ember Crown"]);
+  });
+
+  it("rejects a book with no title", async () => {
+    const res = await author.post("/api/books").send({ title: "   " });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error).toBe("Give the book a title");
+  });
+
+  // The acceptance test from the requirements spec.
+  it("keeps each book's chapters separate and numbered 1, 2, 3", async () => {
+    const first = (await author.post("/api/books").send({ title: "Book One" })).body;
+    const second = (await author.post("/api/books").send({ title: "Book Two" })).body;
+
+    await author.post("/api/chapters").send({ bookId: first.id, text: CHAPTER });
+    const ch2 = await author.post("/api/chapters").send({ bookId: first.id, text: CHAPTER });
+
+    expect(ch2.status).toBe(201);
+    expect(ch2.body.chapter.number).toBe(2);
+    const one = await author.get(`/api/books/${first.id}`);
+    expect(one.body.chapters.map((c: { number: number }) => c.number)).toEqual([1, 2]);
+    const two = await author.get(`/api/books/${second.id}`);
+    expect(two.body).toMatchObject({ title: "Book Two", chapters: [] });
+
+    const ch1 = await author.post("/api/chapters").send({ bookId: second.id, text: CHAPTER });
+    expect(ch1.body.chapter.number).toBe(1);
+    const all = await author.get("/api/books");
+    const counts = Object.fromEntries(all.body.books.map((b: { title: string; chapterCount: number }) => [b.title, b.chapterCount]));
+    expect(counts).toEqual({ "Book One": 2, "Book Two": 1 });
+  });
+
+  it("only checks a chapter against earlier chapters of the same book", async () => {
+    const book = (await author.post("/api/books").send({ title: "Book" })).body;
+    const other = (await author.post("/api/books").send({ title: "Other" })).body;
+    await author.post("/api/chapters").send({ bookId: book.id, text: CHAPTER });
+    extract = blueEyesExtractor;
+    check = fakeChecker("contradiction");
+
+    const res = await author.post("/api/chapters").send({ bookId: other.id, text: CHAPTER });
+
+    expect(res.body.flags).toEqual([]);
+    expect(checkCalls).toHaveLength(0);
+    expect((await author.get(`/api/flags?bookId=${other.id}`)).body.flags).toEqual([]);
+  });
+
+  it("hides another author's book", async () => {
+    const book = (await author.post("/api/books").send({ title: "Secret" })).body;
+    const other = await signUp("other@example.com");
+
+    expect((await other.get(`/api/books/${book.id}`)).status).toBe(404);
+    expect((await other.get("/api/books/not-a-real-id")).status).toBe(404);
+    expect((await other.get(`/api/flags?bookId=${book.id}`)).status).toBe(404);
+    const add = await other.post("/api/chapters").send({ bookId: book.id, text: CHAPTER });
+    expect(add.status).toBe(404);
+    expect((await author.get(`/api/books/${book.id}`)).body.chapters).toEqual([]);
+    expect((await other.get("/api/books")).body.books.map((b: { title: string }) => b.title)).toEqual(["My book"]);
+  });
+});

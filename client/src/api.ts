@@ -20,6 +20,12 @@ export type ChapterSummary = {
   factCount: number
 }
 
+export type BookSummary = {
+  id: string
+  title: string
+  chapterCount: number
+}
+
 export type Book = {
   id: string
   title: string
@@ -68,12 +74,19 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 
 export const getHealth = () => request<{ ok: boolean }>('/api/health')
 
-export const getBook = () => request<Book>('/api/book')
+export const getBooks = () => request<{ books: BookSummary[] }>('/api/books').then((r) => r.books)
+
+export const getBook = (id: string) => request<Book>(`/api/books/${id}`)
+
+export const createBook = (title: string) =>
+  request<Book>('/api/books', { method: 'POST', body: JSON.stringify({ title }) })
 
 export const getChapter = (id: string) => request<ChapterResult>(`/api/chapters/${id}`)
 
-export const addChapter = (chapter: { title?: string; text: string; sourceFormat: 'paste' | 'docx' | 'md' }) =>
-  request<ChapterResult>('/api/chapters', { method: 'POST', body: JSON.stringify(chapter) })
+export type NewChapter = { title?: string; text: string; sourceFormat: 'paste' | 'docx' | 'md' }
+
+export const addChapter = (bookId: string, chapter: NewChapter) =>
+  request<ChapterResult>('/api/chapters', { method: 'POST', body: JSON.stringify({ ...chapter, bookId }) })
 
 export const updateFlag = (id: string, status: FlagStatus) =>
   request<{ flag: Flag }>(`/api/flags/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) })

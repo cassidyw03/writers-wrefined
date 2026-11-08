@@ -16,11 +16,40 @@ const MIN_SIMILARITY = 0.7;
 // Keeps one chapter's check to a single Claude call of a sensible size.
 const MAX_PAIRS = 150;
 
-// Each author gets their own book, created the first time they need one.
-// Choosing between several books (FR2) comes later.
+// The author's first book, created the first time they need one so a new author can start right away.
 export async function getUserBook(db: Db, userId: string) {
   const [existing] = await db.select().from(books).where(eq(books.userId, userId)).orderBy(asc(books.createdAt)).limit(1);
   return existing ?? (await db.insert(books).values({ userId, title: FIRST_BOOK_TITLE }).returning())[0];
+}
+
+// The book with this id, only if userId owns it.
+export async function getOwnedBook(db: Db, bookId: string, userId: string) {
+  const [book] = await db
+    .select()
+    .from(books)
+    .where(and(eq(books.id, bookId), eq(books.userId, userId)));
+  return book;
+}
+
+// All of the author's books, oldest first, each with how many chapters it has (FR2).
+export async function listBooks(db: Db, userId: string) {
+  await getUserBook(db, userId);
+  return db
+    .select({
+      id: books.id,
+      title: books.title,
+      createdAt: books.createdAt,
+      // Spelled out in full: Drizzle leaves column names unqualified here, and "id" would then mean the chapter's id.
+      chapterCount: sql<number>`(select count(*)::int from chapters c where c.book_id = "books"."id" and c.superseded_at is null)`,
+    })
+    .from(books)
+    .where(eq(books.userId, userId))
+    .orderBy(asc(books.createdAt), asc(books.id));
+}
+
+export async function createBook(db: Db, userId: string, title: string) {
+  const [book] = await db.insert(books).values({ userId, title }).returning();
+  return book;
 }
 
 export async function listChapters(db: Db, bookId: string) {

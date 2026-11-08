@@ -1,6 +1,18 @@
 import { useEffect, useState } from 'react'
-import { addChapter, getBook, getChapter, getHealth, type Book, type ChapterResult, type FactType } from './api'
+import {
+  addChapter,
+  getBook,
+  getBooks,
+  getChapter,
+  getHealth,
+  type Book,
+  type BookSummary,
+  type ChapterResult,
+  type FactType,
+  type NewChapter,
+} from './api'
 import { authClient } from './authClient'
+import { BookPicker } from './BookPicker'
 import { ChapterForm } from './ChapterForm'
 import { FactList } from './FactList'
 import { FlagList } from './FlagList'
@@ -37,7 +49,7 @@ function App() {
 
       {isPending ? null : session ? (
         // Keyed by user so logging in as someone else starts with a fresh book.
-        <Workspace key={session.user.id} apiOnline={status === 'online'} />
+        <Workspace key={session.user.id} userId={session.user.id} apiOnline={status === 'online'} />
       ) : (
         <main className="content content-wide">
           <LoginForm />
@@ -47,30 +59,84 @@ function App() {
   )
 }
 
-// The signed-in view: the author's chapters on the side, the chapter form and results in the middle.
-function Workspace({ apiOnline }: { apiOnline: boolean }) {
+// Remembers the last book each author opened, so a reload comes back to it. Storage can be blocked; that is fine.
+const lastBookKey = (userId: string) => `writers-wrefined:last-book:${userId}`
+
+function readLastBook(userId: string) {
+  try {
+    return localStorage.getItem(lastBookKey(userId))
+  } catch {
+    return null
+  }
+}
+
+function saveLastBook(userId: string, bookId: string) {
+  try {
+    localStorage.setItem(lastBookKey(userId), bookId)
+  } catch {
+    // Not remembering the book is only a small inconvenience.
+  }
+}
+
+// The signed-in view: the author's books and chapters on the side, the chapter form and results in the middle.
+function Workspace({ userId, apiOnline }: { userId: string; apiOnline: boolean }) {
+  const [books, setBooks] = useState<BookSummary[]>([])
   const [book, setBook] = useState<Book | null>(null)
   const [result, setResult] = useState<ChapterResult | null>(null)
   const [extracting, setExtracting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const refreshBook = () => getBook().then(setBook).catch(() => setBook(null))
+  const refreshBooks = () =>
+    getBooks()
+      .then((list) => {
+        setBooks(list)
+        return list
+      })
+      .catch(() => [] as BookSummary[])
+
+  async function openBook(id: string) {
+    setError(null)
+    setResult(null)
+    try {
+      setBook(await getBook(id))
+      saveLastBook(userId, id)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : String(e))
+    }
+  }
 
   useEffect(() => {
-    refreshBook()
+    refreshBooks().then((list) => {
+      const last = readLastBook(userId)
+      const start = list.find((b) => b.id === last) ?? list[0]
+      if (start) openBook(start.id)
+    })
+    // Runs once per author: Workspace is keyed by user, so userId never changes here.
+    // oxlint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  async function handleSubmit(chapter: Parameters<typeof addChapter>[0]) {
+  async function handleBookCreated(created: Book) {
+    await refreshBooks()
+    setResult(null)
+    setError(null)
+    setBook(created)
+    saveLastBook(userId, created.id)
+  }
+
+  async function handleSubmit(chapter: NewChapter) {
+    if (!book) return
+    const bookId = book.id
     setExtracting(true)
     setError(null)
     setResult(null)
     try {
-      setResult(await addChapter(chapter))
+      setResult(await addChapter(bookId, chapter))
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e))
     } finally {
       setExtracting(false)
-      refreshBook()
+      getBook(bookId).then(setBook).catch(() => {})
+      refreshBooks()
     }
   }
 
@@ -86,6 +152,13 @@ function Workspace({ apiOnline }: { apiOnline: boolean }) {
   return (
     <>
       <aside className="sidebar">
+        <BookPicker
+          books={books}
+          currentId={book?.id ?? null}
+          disabled={extracting}
+          onOpen={openBook}
+          onCreated={handleBookCreated}
+        />
         <h2>{book?.title ?? 'Chapters'}</h2>
         {book && book.chapters.length === 0 && <p className="muted">No chapters yet.</p>}
         <ol className="chapter-list">
@@ -104,7 +177,7 @@ function Workspace({ apiOnline }: { apiOnline: boolean }) {
       </aside>
 
       <main className="content">
-        <ChapterForm onSubmit={handleSubmit} disabled={extracting || !apiOnline} />
+        <ChapterForm onSubmit={handleSubmit} disabled={extracting || !apiOnline || !book} />
 
         {extracting && (
           <p className="notice" role="status">

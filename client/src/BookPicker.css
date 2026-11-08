@@ -1,0 +1,52 @@
+.book-picker {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.book-picker label {
+  color: var(--text-h);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.book-picker select,
+.book-new input {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-h);
+}
+
+.book-picker > .link-button {
+  justify-self: start;
+}
+
+.book-new {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.book-new-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.book-new button[type='submit'] {
+  padding: 0.35rem 0.9rem;
+  font-size: 0.9rem;
+}
+
+.book-error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #b5473a;
+}
