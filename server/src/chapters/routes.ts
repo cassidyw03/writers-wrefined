@@ -13,12 +13,17 @@ import {
   getUserBook,
   listChapters,
   listFlags,
+  resolveFlag,
 } from "./service.js";
 
 const NewChapterBody = z.object({
   title: z.string().trim().min(1).max(200).optional(),
   text: z.string().trim().min(1, "Chapter text is empty").max(200_000, "Chapter is too long"),
   sourceFormat: z.enum(["paste", "docx", "md"]).default("paste"),
+});
+
+const FlagUpdateBody = z.object({
+  status: z.enum(["accepted", "dismissed", "open"]),
 });
 
 export function chapterRoutes(db: Db, extract: Extractor, embed?: Embedder, check?: Checker) {
@@ -70,6 +75,22 @@ export function chapterRoutes(db: Db, extract: Extractor, embed?: Embedder, chec
   router.get("/flags", async (_req, res) => {
     const book = await getUserBook(db, res.locals.user.id);
     res.json({ flags: await listFlags(db, book.id) });
+  });
+
+  // The author accepts a flag as a real problem, dismisses it, or reopens it (FR11).
+  router.patch("/flags/:id", async (req, res) => {
+    const body = FlagUpdateBody.safeParse(req.body);
+    if (!body.success) {
+      res.status(400).json({ error: "Status must be accepted, dismissed, or open" });
+      return;
+    }
+    const parsed = z.uuid().safeParse(req.params.id);
+    const flag = parsed.success ? await resolveFlag(db, parsed.data, res.locals.user.id, body.data.status) : undefined;
+    if (!flag) {
+      res.status(404).json({ error: "Flag not found" });
+      return;
+    }
+    res.json({ flag });
   });
 
   // Earlier facts most similar to this one. Groundwork for the continuity checker; empty until facts have vectors.

@@ -359,3 +359,71 @@ describe("continuity check", () => {
     expect(res.body.flags).toEqual([]);
   });
 });
+
+describe("PATCH /api/flags/:id", () => {
+  async function raiseFlag() {
+    await author.post("/api/chapters").send({ text: CHAPTER });
+    extract = blueEyesExtractor;
+    check = fakeChecker("contradiction");
+    const res = await author.post("/api/chapters").send({ text: CHAPTER });
+    return res.body.flags[0] as { id: string };
+  }
+
+  it("accepts a flag and keeps the decision after reloading", async () => {
+    const flag = await raiseFlag();
+
+    const res = await author.patch(`/api/flags/${flag.id}`).send({ status: "accepted" });
+
+    expect(res.status).toBe(200);
+    expect(res.body.flag).toMatchObject({ id: flag.id, status: "accepted", earlierFact: { value: "black" } });
+    const all = await author.get("/api/flags");
+    expect(all.body.flags[0].status).toBe("accepted");
+    const [row] = await db.select().from(schema.flags);
+    expect(row.resolvedAt).toBeInstanceOf(Date);
+
+    const events = await readEvents(db, (await author.get("/api/book")).body.id);
+    const resolved = events.filter((e) => e.type === "FlagResolved");
+    expect(resolved.map((e) => e.data)).toEqual([{ flagId: flag.id, resolution: "accepted" }]);
+  });
+
+  it("dismisses a flag, then reopens it", async () => {
+    const flag = await raiseFlag();
+
+    await author.patch(`/api/flags/${flag.id}`).send({ status: "dismissed" });
+    const res = await author.patch(`/api/flags/${flag.id}`).send({ status: "open" });
+
+    expect(res.body.flag.status).toBe("open");
+    const [row] = await db.select().from(schema.flags);
+    expect(row.resolvedAt).toBeNull();
+    const events = await readEvents(db, (await author.get("/api/book")).body.id);
+    expect(events.filter((e) => e.type === "FlagResolved")).toHaveLength(2);
+  });
+
+  it("does not add an event when the status is unchanged", async () => {
+    const flag = await raiseFlag();
+
+    await author.patch(`/api/flags/${flag.id}`).send({ status: "accepted" });
+    await author.patch(`/api/flags/${flag.id}`).send({ status: "accepted" });
+
+    const events = await readEvents(db, (await author.get("/api/book")).body.id);
+    expect(events.filter((e) => e.type === "FlagResolved")).toHaveLength(1);
+  });
+
+  it("rejects an unknown status", async () => {
+    const flag = await raiseFlag();
+
+    const res = await author.patch(`/api/flags/${flag.id}`).send({ status: "deleted" });
+
+    expect(res.status).toBe(400);
+  });
+
+  it("returns 404 for a bad id or another author's flag", async () => {
+    const flag = await raiseFlag();
+    const other = await signUp("other@example.com");
+
+    expect((await author.patch("/api/flags/not-a-real-id").send({ status: "accepted" })).status).toBe(404);
+    expect((await other.patch(`/api/flags/${flag.id}`).send({ status: "dismissed" })).status).toBe(404);
+    const [row] = await db.select().from(schema.flags);
+    expect(row.status).toBe("open");
+  });
+});

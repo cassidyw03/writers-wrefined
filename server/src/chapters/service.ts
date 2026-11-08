@@ -296,20 +296,59 @@ const flagFact = (f: typeof newFact | typeof earlierFact) => ({
   quote: f.quote,
 });
 
+const flagColumns = {
+  id: flags.id,
+  status: flags.status,
+  explanation: flags.explanation,
+  newFact: flagFact(newFact),
+  earlierFact: flagFact(earlierFact),
+};
+
+function selectFlags(db: Db) {
+  return db
+    .select(flagColumns)
+    .from(flags)
+    .innerJoin(newFact, eq(newFact.eventId, flags.newFactId))
+    .innerJoin(earlierFact, eq(earlierFact.eventId, flags.earlierFactId));
+}
+
 // A book's flags, oldest first, each with both facts so they can be shown side by side.
 // Pass chapterId for only the flags raised by that chapter's facts.
 export async function listFlags(db: Db, bookId: string, chapterId?: string) {
-  return db
-    .select({
-      id: flags.id,
-      status: flags.status,
-      explanation: flags.explanation,
-      newFact: flagFact(newFact),
-      earlierFact: flagFact(earlierFact),
-    })
-    .from(flags)
-    .innerJoin(newFact, eq(newFact.eventId, flags.newFactId))
-    .innerJoin(earlierFact, eq(earlierFact.eventId, flags.earlierFactId))
+  return selectFlags(db)
     .where(and(eq(flags.bookId, bookId), chapterId ? eq(newFact.chapterId, chapterId) : undefined))
     .orderBy(asc(newFact.chapterNumber), asc(flags.createdAt));
+}
+
+export type FlagResolution = "accepted" | "dismissed" | "open";
+
+// Records the author's decision on a flag (FR11): accepted means it is a real problem to fix,
+// dismissed means it is not, and open undoes either. The decision is a FlagResolved event,
+// then the flags projection is updated so it survives reloads and new sessions.
+// Returns undefined if the flag does not exist or userId does not own its book.
+export async function resolveFlag(db: Db, flagId: string, userId: string, resolution: FlagResolution) {
+  const [flag] = await db
+    .select({ id: flags.id, bookId: flags.bookId, status: flags.status, chapterId: newFact.chapterId })
+    .from(flags)
+    .innerJoin(books, eq(books.id, flags.bookId))
+    .innerJoin(newFact, eq(newFact.eventId, flags.newFactId))
+    .where(and(eq(flags.id, flagId), eq(books.userId, userId)));
+  if (!flag) return undefined;
+
+  // Clicking the same button twice should not add a second event.
+  if (flag.status !== resolution) {
+    await appendEvent(db, {
+      bookId: flag.bookId,
+      chapterId: flag.chapterId,
+      type: "FlagResolved",
+      data: { flagId, resolution },
+    });
+    await db
+      .update(flags)
+      .set({ status: resolution, resolvedAt: resolution === "open" ? null : new Date() })
+      .where(eq(flags.id, flagId));
+  }
+
+  const [updated] = await selectFlags(db).where(eq(flags.id, flagId));
+  return updated;
 }

@@ -35,9 +35,11 @@ export type FlagFact = {
   quote: string
 }
 
+export type FlagStatus = 'open' | 'accepted' | 'dismissed'
+
 export type Flag = {
   id: string
-  status: 'open' | 'accepted' | 'dismissed'
+  status: FlagStatus
   explanation: string
   newFact: FlagFact
   earlierFact: FlagFact
@@ -72,3 +74,6 @@ export const getChapter = (id: string) => request<ChapterResult>(`/api/chapters/
 
 export const addChapter = (chapter: { title?: string; text: string; sourceFormat: 'paste' | 'docx' | 'md' }) =>
   request<ChapterResult>('/api/chapters', { method: 'POST', body: JSON.stringify(chapter) })
+
+export const updateFlag = (id: string, status: FlagStatus) =>
+  request<{ flag: Flag }>(`/api/flags/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) })

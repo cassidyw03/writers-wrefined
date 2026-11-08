@@ -49,6 +49,66 @@
   font-size: 0.9rem;
 }
 
+/* Once the author decides, the card fades and its border shows the decision. */
+.flag-accepted,
+.flag-dismissed {
+  opacity: 0.7;
+}
+
+.flag-accepted {
+  border-left-color: var(--sage-dark);
+}
+
+.flag-dismissed {
+  border-left-color: var(--border);
+}
+
+.flag-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.flag-actions button {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.flag-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.flag-accept {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+.flag-dismiss,
+.flag-undo {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-h);
+}
+
+.flag-status {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.flag-error {
+  font-size: 0.9rem;
+  color: #b5473a;
+}
+
 @media (max-width: 640px) {
   .flag-sides {
     grid-template-columns: 1fr;

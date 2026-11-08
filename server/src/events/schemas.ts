@@ -35,9 +35,10 @@ export const FlagRaisedData = z.object({
   explanation: nonEmpty,
 });
 
+// "open" reopens a flag the author accepted or dismissed by mistake.
 export const FlagResolvedData = z.object({
   flagId: id,
-  resolution: z.enum(["accepted", "dismissed"]),
+  resolution: z.enum(["accepted", "dismissed", "open"]),
 });
 
 export const ChapterReplacedData = z.object({

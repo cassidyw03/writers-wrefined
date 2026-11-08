@@ -121,7 +121,13 @@ function Workspace({ apiOnline }: { apiOnline: boolean }) {
               {result.chapter.title ? `: ${result.chapter.title}` : ''}
             </h2>
             <Summary result={result} />
-            <FlagList flags={result.flags} check={result.check} />
+            <FlagList
+              flags={result.flags}
+              check={result.check}
+              onFlagChange={(flag) =>
+                setResult((r) => r && { ...r, flags: r.flags.map((f) => (f.id === flag.id ? flag : f)) })
+              }
+            />
             <FactList facts={result.facts} />
           </section>
         )}
