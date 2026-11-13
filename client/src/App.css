@@ -11,13 +11,14 @@
 
 .site-header {
   grid-area: header;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--sage-winter);
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
 }
 
 .site-header h1 {
   margin: 24px 0 8px;
+  color: var(--sage-deep);
 }
 
 .tagline {
@@ -26,6 +27,11 @@
 
 .sidebar {
   grid-area: sidebar;
+  align-self: start;
+  padding: 1rem;
+  border-radius: 12px;
+  background: var(--sage-mist);
+  border: 1px solid var(--border);
 }
 
 .content {
@@ -47,11 +53,11 @@
 }
 
 .status-online {
-  color: #1a7f37;
+  color: var(--accent);
 }
 
 .status-offline {
-  color: #cf222e;
+  color: #b5473a;
 }
 
 .muted {
@@ -82,10 +88,18 @@
   cursor: pointer;
 }
 
-.chapter-link:hover,
-.chapter-link.active {
+.chapter-link:hover {
   background: var(--accent-bg);
-  border-color: var(--accent-border);
+}
+
+.chapter-link.active {
+  color: var(--accent-text);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.chapter-link.active .muted {
+  color: var(--accent-text);
 }
 
 .chapter-form {
@@ -94,6 +108,8 @@
   padding: 1.25rem;
   border: 1px solid var(--border);
   border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
 }
 
 .chapter-form label {
@@ -132,7 +148,7 @@ button[type='submit'] {
   border: none;
   border-radius: 6px;
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-text);
   font-weight: 600;
   cursor: pointer;
 }
@@ -151,7 +167,7 @@ button[type='submit']:disabled {
 }
 
 .notice-error {
-  background: rgba(207, 34, 46, 0.12);
+  background: rgba(181, 71, 58, 0.12);
 }
 
 .results {
@@ -169,6 +185,7 @@ button[type='submit']:disabled {
   padding: 0.5rem 0.8rem;
   border: 1px solid var(--border);
   border-radius: 8px;
+  background: var(--sage-mist);
 }
 
 .summary dt {
@@ -202,8 +219,9 @@ button[type='submit']:disabled {
 }
 
 .chip.active {
-  background: var(--accent-bg);
-  border-color: var(--accent-border);
+  color: var(--accent-text);
+  background: var(--accent);
+  border-color: var(--accent);
 }
 
 .facts {
@@ -217,7 +235,9 @@ button[type='submit']:disabled {
 .fact {
   padding: 0.9rem 1rem;
   border: 1px solid var(--border);
+  border-left: 4px solid var(--sage);
   border-radius: 10px;
+  background: var(--surface-soft);
 }
 
 .fact-head {
@@ -234,7 +254,7 @@ button[type='submit']:disabled {
 .fact blockquote {
   margin: 0.5rem 0 0;
   padding-left: 0.8rem;
-  border-left: 3px solid var(--border);
+  border-left: 3px solid var(--sage-winter);
   font-style: italic;
   font-size: 0.9rem;
 }
@@ -248,27 +268,28 @@ button[type='submit']:disabled {
   border-radius: 4px;
 }
 
+/* Fact types: sage, dusty blue, clay, and heather, chosen to sit comfortably beside the sage palette */
 .badge-attribute {
-  background: rgba(9, 105, 218, 0.15);
-  color: #0969da;
+  background: rgba(143, 172, 138, 0.3);
+  color: #3f6340;
 }
 
 .badge-relationship {
-  background: rgba(130, 80, 223, 0.15);
-  color: #8250df;
+  background: rgba(91, 125, 150, 0.18);
+  color: #3f5f74;
 }
 
 .badge-event {
-  background: rgba(191, 135, 0, 0.18);
-  color: #9a6700;
+  background: rgba(196, 132, 84, 0.2);
+  color: #85502b;
 }
 
 .badge-knowledge {
-  background: rgba(26, 127, 55, 0.15);
-  color: #1a7f37;
+  background: rgba(140, 104, 140, 0.18);
+  color: #654a68;
 }
 
 .warn {
-  color: #cf222e;
+  color: #b5473a;
   font-size: 0.85rem;
 }
