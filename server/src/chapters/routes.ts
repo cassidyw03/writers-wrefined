@@ -5,6 +5,7 @@ import type { Checker } from "../checking/check.js";
 import type { Db } from "../db/client.js";
 import type { Embedder } from "../embeddings/embed.js";
 import { ExtractionError, type Extractor } from "../extraction/extract.js";
+import { getWorldState } from "../worldstate/service.js";
 import {
   addChapter,
   createBook,
@@ -69,6 +70,20 @@ export function chapterRoutes(db: Db, extract: Extractor, embed?: Embedder, chec
   router.get("/books/:id", async (req, res) => {
     const book = await bookFor(req.params.id, res);
     if (book) res.json(await bookView(book));
+  });
+
+  // What is true about every subject as of chapter N (FR12). ?chapter= defaults to the latest chapter.
+  router.get("/books/:id/world-state", async (req, res) => {
+    const chapter = z.coerce.number().int().min(1).optional().safeParse(req.query.chapter);
+    if (!chapter.success) {
+      res.status(400).json({ error: "chapter must be a whole number, 1 or more" });
+      return;
+    }
+    const book = await bookFor(req.params.id, res);
+    if (!book) return;
+    const state = await getWorldState(db, book.id, chapter.data);
+    // Without ?chapter=, report the latest chapter rather than the "everything" placeholder used to replay.
+    res.json(chapter.data === undefined ? { ...state, chapterNumber: state.latestChapter } : state);
   });
 
   // The author's first book. Kept for older clients; new code uses /books/:id.

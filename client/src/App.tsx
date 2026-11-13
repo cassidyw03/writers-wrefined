@@ -17,6 +17,7 @@ import { ChapterForm } from './ChapterForm'
 import { FactList } from './FactList'
 import { FlagList } from './FlagList'
 import { LoginForm } from './LoginForm'
+import { WorldStateView } from './WorldStateView'
 import './App.css'
 
 type ApiStatus = 'checking' | 'online' | 'offline'
@@ -85,6 +86,8 @@ function Workspace({ userId, apiOnline }: { userId: string; apiOnline: boolean }
   const [result, setResult] = useState<ChapterResult | null>(null)
   const [extracting, setExtracting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // The middle of the page shows either a chapter's results or the world-state view (FR12).
+  const [view, setView] = useState<'chapter' | 'world'>('chapter')
 
   const refreshBooks = () =>
     getBooks()
@@ -97,6 +100,7 @@ function Workspace({ userId, apiOnline }: { userId: string; apiOnline: boolean }
   async function openBook(id: string) {
     setError(null)
     setResult(null)
+    setView('chapter')
     try {
       setBook(await getBook(id))
       saveLastBook(userId, id)
@@ -119,6 +123,7 @@ function Workspace({ userId, apiOnline }: { userId: string; apiOnline: boolean }
     await refreshBooks()
     setResult(null)
     setError(null)
+    setView('chapter')
     setBook(created)
     saveLastBook(userId, created.id)
   }
@@ -142,6 +147,7 @@ function Workspace({ userId, apiOnline }: { userId: string; apiOnline: boolean }
 
   async function openChapter(id: string) {
     setError(null)
+    setView('chapter')
     try {
       setResult(await getChapter(id))
     } catch (e) {
@@ -165,7 +171,7 @@ function Workspace({ userId, apiOnline }: { userId: string; apiOnline: boolean }
           {book?.chapters.map((c) => (
             <li key={c.id}>
               <button
-                className={result?.chapter.id === c.id ? 'chapter-link active' : 'chapter-link'}
+                className={view === 'chapter' && result?.chapter.id === c.id ? 'chapter-link active' : 'chapter-link'}
                 onClick={() => openChapter(c.id)}
               >
                 <span>Ch. {c.number}{c.title ? `: ${c.title}` : ''}</span>
@@ -174,35 +180,54 @@ function Workspace({ userId, apiOnline }: { userId: string; apiOnline: boolean }
             </li>
           ))}
         </ol>
+        {book && book.chapters.length > 0 && (
+          <button
+            type="button"
+            className={view === 'world' ? 'chapter-link world-link active' : 'chapter-link world-link'}
+            onClick={() => {
+              setError(null)
+              setView('world')
+            }}
+          >
+            <span>World state</span>
+            <span className="muted">as of any chapter</span>
+          </button>
+        )}
       </aside>
 
       <main className="content">
-        <ChapterForm onSubmit={handleSubmit} disabled={extracting || !apiOnline || !book} />
+        {view === 'world' && book ? (
+          <WorldStateView key={book.id} bookId={book.id} chapterCount={Math.max(0, ...book.chapters.map((c) => c.number))} />
+        ) : (
+          <>
+            <ChapterForm onSubmit={handleSubmit} disabled={extracting || !apiOnline || !book} />
 
-        {extracting && (
-          <p className="notice" role="status">
-            Claude is reading the chapter, pulling out facts, and checking them against earlier chapters. This usually
-            takes two to three minutes.
-          </p>
-        )}
-        {error && <p className="notice notice-error" role="alert">{error}</p>}
+            {extracting && (
+              <p className="notice" role="status">
+                Claude is reading the chapter, pulling out facts, and checking them against earlier chapters. This usually
+                takes two to three minutes.
+              </p>
+            )}
+            {error && <p className="notice notice-error" role="alert">{error}</p>}
 
-        {result && (
-          <section className="results">
-            <h2>
-              Chapter {result.chapter.number}
-              {result.chapter.title ? `: ${result.chapter.title}` : ''}
-            </h2>
-            <Summary result={result} />
-            <FlagList
-              flags={result.flags}
-              check={result.check}
-              onFlagChange={(flag) =>
-                setResult((r) => r && { ...r, flags: r.flags.map((f) => (f.id === flag.id ? flag : f)) })
-              }
-            />
-            <FactList facts={result.facts} />
-          </section>
+            {result && (
+              <section className="results">
+                <h2>
+                  Chapter {result.chapter.number}
+                  {result.chapter.title ? `: ${result.chapter.title}` : ''}
+                </h2>
+                <Summary result={result} />
+                <FlagList
+                  flags={result.flags}
+                  check={result.check}
+                  onFlagChange={(flag) =>
+                    setResult((r) => r && { ...r, flags: r.flags.map((f) => (f.id === flag.id ? flag : f)) })
+                  }
+                />
+                <FactList facts={result.facts} />
+              </section>
+            )}
+          </>
         )}
       </main>
     </>

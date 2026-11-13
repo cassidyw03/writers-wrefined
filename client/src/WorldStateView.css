@@ -1,0 +1,118 @@
+.world-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.world-head h2 {
+  margin: 0;
+}
+
+.world-chapter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-h);
+  font-size: 0.95rem;
+}
+
+.world-chapter select,
+.world-filter {
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-h);
+}
+
+.world-filter {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0.25rem 0 1rem;
+}
+
+.world-group h3 {
+  margin: 1.25rem 0 0.5rem;
+}
+
+.world-subjects,
+.world-details {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.world-subjects {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.75rem;
+}
+
+.world-subject {
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--sage);
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.world-subject h4 {
+  margin: 0 0 0.4rem;
+  color: var(--sage-deep);
+}
+
+.world-detail {
+  padding: 0.4rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.world-detail:first-child {
+  border-top: none;
+}
+
+.world-detail p {
+  margin: 0;
+}
+
+.world-attribute {
+  color: var(--text);
+}
+
+.world-note {
+  margin-top: 0.2rem !important;
+  font-size: 0.88rem;
+}
+
+.world-change {
+  color: var(--sage-dark);
+}
+
+/* Same clay red as the flag cards. */
+.world-flag {
+  color: #b5473a;
+}
+
+.world-detail details {
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+}
+
+.world-detail summary {
+  cursor: pointer;
+  color: var(--accent);
+}
+
+.world-detail blockquote {
+  margin: 0.3rem 0 0;
+  padding-left: 0.8rem;
+  border-left: 3px solid var(--sage-winter);
+  font-style: italic;
+}
+
+.world-link {
+  margin-top: 0.75rem;
+}

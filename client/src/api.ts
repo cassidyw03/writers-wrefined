@@ -90,3 +90,30 @@ export const addChapter = (bookId: string, chapter: NewChapter) =>
 
 export const updateFlag = (id: string, status: FlagStatus) =>
   request<{ flag: Flag }>(`/api/flags/${id}`, { method: 'PATCH', body: JSON.stringify({ status }) })
+
+export type WorldDetail = {
+  factId: string
+  type: 'attribute' | 'relationship' | 'knowledge'
+  attribute: string
+  value: string
+  quote: string
+  chapterNumber: number
+  history: { value: string; chapterNumber: number }[]
+  change: { reason: string; from: string; fromChapter: number } | null
+  flags: { id: string | null; status: FlagStatus; explanation: string; earlierValue: string; earlierChapter: number }[]
+}
+
+export type WorldSubject = {
+  name: string
+  kind: 'character' | 'place' | 'object' | 'group'
+  details: WorldDetail[]
+}
+
+export type WorldState = {
+  chapterNumber: number
+  latestChapter: number
+  subjects: WorldSubject[]
+}
+
+export const getWorldState = (bookId: string, chapter?: number) =>
+  request<WorldState>(`/api/books/${bookId}/world-state${chapter ? `?chapter=${chapter}` : ''}`)

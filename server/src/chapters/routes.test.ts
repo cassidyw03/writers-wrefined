@@ -503,3 +503,64 @@ describe("books (FR2)", () => {
     expect((await other.get("/api/books")).body.books.map((b: { title: string }) => b.title)).toEqual(["My book"]);
   });
 });
+
+describe("GET /api/books/:id/world-state (FR12)", () => {
+  type Detail = { attribute: string; value: string; change: { from: string } | null; flags: { status: string }[] };
+  const eyes = (body: { subjects: { name: string; details: Detail[] }[] }) =>
+    body.subjects.find((s) => s.name === "Heathcliff")?.details.find((d) => d.attribute === "eye color");
+
+  async function bookWithChange(verdict: "state_change" | "contradiction") {
+    const book = (await author.post("/api/books").send({ title: "Test" })).body;
+    await author.post("/api/chapters").send({ bookId: book.id, text: CHAPTER });
+    extract = blueEyesExtractor;
+    check = fakeChecker(verdict);
+    await author.post("/api/chapters").send({ bookId: book.id, text: CHAPTER });
+    return book.id as string;
+  }
+
+  it("shows each chapter's value, replayed from events", async () => {
+    const bookId = await bookWithChange("state_change");
+
+    const before = await author.get(`/api/books/${bookId}/world-state?chapter=1`);
+    const after = await author.get(`/api/books/${bookId}/world-state?chapter=2`);
+
+    expect(before.status).toBe(200);
+    expect(before.body).toMatchObject({ chapterNumber: 1, latestChapter: 2 });
+    expect(eyes(before.body)).toMatchObject({ value: "black", change: null });
+    expect(eyes(after.body)).toMatchObject({ value: "blue", change: { from: "black" }, flags: [] });
+  });
+
+  it("defaults to the latest chapter", async () => {
+    const bookId = await bookWithChange("state_change");
+
+    const res = await author.get(`/api/books/${bookId}/world-state`);
+
+    expect(res.body.chapterNumber).toBe(2);
+    expect(eyes(res.body)?.value).toBe("blue");
+  });
+
+  it("shows a contradiction's flag with the writer's decision", async () => {
+    const bookId = await bookWithChange("contradiction");
+    const [flag] = (await author.get(`/api/flags?bookId=${bookId}`)).body.flags;
+    await author.patch(`/api/flags/${flag.id}`).send({ status: "accepted" });
+
+    const res = await author.get(`/api/books/${bookId}/world-state?chapter=2`);
+
+    expect(eyes(res.body)?.flags).toMatchObject([{ status: "accepted", earlierValue: "black" }]);
+  });
+
+  it("rejects a bad chapter number", async () => {
+    const book = (await author.get("/api/books")).body.books[0];
+
+    for (const chapter of ["0", "two", "1.5"]) {
+      expect((await author.get(`/api/books/${book.id}/world-state?chapter=${chapter}`)).status).toBe(400);
+    }
+  });
+
+  it("hides another author's world state", async () => {
+    const bookId = await bookWithChange("state_change");
+    const other = await signUp("other@example.com");
+
+    expect((await other.get(`/api/books/${bookId}/world-state`)).status).toBe(404);
+  });
+});
