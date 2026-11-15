@@ -1,0 +1,64 @@
+/* A vertical line with a numbered dot for each event. */
+.timeline {
+  list-style: none;
+  counter-reset: event;
+  margin: 0.75rem 0 0;
+  padding: 0 0 0 2.25rem;
+  position: relative;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0.85rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  background: var(--sage-winter);
+}
+
+.timeline-entry {
+  counter-increment: event;
+  position: relative;
+  margin-bottom: 0.75rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-soft);
+}
+
+.timeline-entry::before {
+  content: counter(event);
+  position: absolute;
+  left: -2.25rem;
+  top: 0.55rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent-text);
+  background: var(--accent);
+}
+
+.timeline-guess::before {
+  background: var(--sage);
+}
+
+.timeline-entry p {
+  margin: 0;
+}
+
+.timeline-entry blockquote {
+  margin: 0.4rem 0 0;
+  padding-left: 0.8rem;
+  border-left: 3px solid var(--sage-winter);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.results-tabs {
+  margin-top: 1.25rem;
+}

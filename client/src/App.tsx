@@ -17,6 +17,7 @@ import { ChapterForm } from './ChapterForm'
 import { FactList } from './FactList'
 import { FlagList } from './FlagList'
 import { LoginForm } from './LoginForm'
+import { Timeline } from './Timeline'
 import { WorldStateView } from './WorldStateView'
 import './App.css'
 
@@ -224,12 +225,35 @@ function Workspace({ userId, apiOnline }: { userId: string; apiOnline: boolean }
                     setResult((r) => r && { ...r, flags: r.flags.map((f) => (f.id === flag.id ? flag : f)) })
                   }
                 />
-                <FactList facts={result.facts} />
+                <ResultTabs result={result} />
               </section>
             )}
           </>
         )}
       </main>
+    </>
+  )
+}
+
+// A chapter's facts, or its events as a timeline (FR13).
+function ResultTabs({ result }: { result: ChapterResult }) {
+  const [tab, setTab] = useState<'facts' | 'timeline'>('facts')
+  return (
+    <>
+      <div className="filters results-tabs" role="tablist" aria-label="Chapter results">
+        <button role="tab" aria-selected={tab === 'facts'} className={tab === 'facts' ? 'chip active' : 'chip'} onClick={() => setTab('facts')}>
+          Facts ({result.facts.length})
+        </button>
+        <button
+          role="tab"
+          aria-selected={tab === 'timeline'}
+          className={tab === 'timeline' ? 'chip active' : 'chip'}
+          onClick={() => setTab('timeline')}
+        >
+          Timeline ({result.timeline.length})
+        </button>
+      </div>
+      {tab === 'facts' ? <FactList facts={result.facts} /> : <Timeline entries={result.timeline} />}
     </>
   )
 }

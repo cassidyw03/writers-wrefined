@@ -564,3 +564,31 @@ describe("GET /api/books/:id/world-state (FR12)", () => {
     expect((await other.get(`/api/books/${bookId}/world-state`)).status).toBe(404);
   });
 });
+
+describe("chapter timeline (FR13)", () => {
+  // Claude does not return facts in story order, so the extractor lists the events backwards.
+  const STORY = "Heathcliff arrived at the Heights. Catherine laughed at him. Hindley struck him.";
+  const backwardsExtractor: Extractor = async () => ({
+    model: "fake-model",
+    inputTokens: 100,
+    outputTokens: 50,
+    facts: [
+      { type: "event", subject: "Hindley", subject_kind: "character", attribute: "event", value: "strikes Heathcliff", quote: "Hindley struck him." },
+      { type: "attribute", subject: "Heathcliff", subject_kind: "character", attribute: "status", value: "new arrival", quote: "Heathcliff arrived at the Heights." },
+      { type: "event", subject: "Catherine", subject_kind: "character", attribute: "event", value: "laughs at Heathcliff", quote: "Catherine laughed at him." },
+      { type: "event", subject: "Heathcliff", subject_kind: "character", attribute: "event", value: "arrives at the Heights", quote: "Heathcliff arrived at the Heights." },
+    ],
+  });
+
+  it("returns the chapter's events in text order, when added and when reopened", async () => {
+    extract = backwardsExtractor;
+    const expected = ["arrives at the Heights", "laughs at Heathcliff", "strikes Heathcliff"];
+
+    const added = await author.post("/api/chapters").send({ text: STORY });
+    const reopened = await author.get(`/api/chapters/${added.body.chapter.id}`);
+
+    expect(added.body.timeline.map((e: { value: string }) => e.value)).toEqual(expected);
+    expect(reopened.body.timeline.map((e: { value: string }) => e.value)).toEqual(expected);
+    expect(reopened.body.timeline[0]).toMatchObject({ subject: "Heathcliff", quoteFound: true });
+  });
+});

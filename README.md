@@ -48,6 +48,7 @@ server/   Express API
   src/db/           Drizzle schema, database connection, and the clear-test-data script
   src/embeddings/   Voyage AI embeddings for facts
   src/events/       Event schemas (Zod) and the event store (appendEvent, readEvents)
+  src/timeline/     Orders a chapter's events by where their quotes appear in the text
   src/worldstate/   Replays a book's events into the world state as of chapter N
   src/extraction/   Claude extraction prompt, fact schema, and extractor
 ```
@@ -66,7 +67,7 @@ author's books.
 | `GET /api/books/:id/world-state?chapter=N` | What is true about every subject after chapters 1 to N, replayed from the event log. Leave out `chapter` for the latest |
 | `GET /api/book` | The author's first book. Kept for older clients |
 | `POST /api/chapters` | Body `{ bookId?, title?, text, sourceFormat }`. Saves the chapter, extracts its facts with Claude, embeds them, and checks them against earlier chapters of the same book. Takes two to three minutes |
-| `GET /api/chapters/:id` | A saved chapter's facts and flags |
+| `GET /api/chapters/:id` | A saved chapter's facts, flags, and timeline (its events in the order their quotes appear in the text) |
 | `GET /api/flags?bookId=` | Every flag in a book, with the earlier and new fact side by side |
 | `PATCH /api/flags/:id` | Body `{ status }`: `accepted`, `dismissed`, or `open` to undo |
 | `GET /api/facts/:id/related` | Earlier facts most similar to this one |

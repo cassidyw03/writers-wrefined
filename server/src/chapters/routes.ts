@@ -5,6 +5,7 @@ import type { Checker } from "../checking/check.js";
 import type { Db } from "../db/client.js";
 import type { Embedder } from "../embeddings/embed.js";
 import { ExtractionError, type Extractor } from "../extraction/extract.js";
+import { buildTimeline } from "../timeline/timeline.js";
 import { getWorldState } from "../worldstate/service.js";
 import {
   addChapter,
@@ -123,9 +124,11 @@ export function chapterRoutes(db: Db, extract: Extractor, embed?: Embedder, chec
       res.status(404).json({ error: "Chapter not found" });
       return;
     }
+    const facts = await getChapterFacts(db, chapter.id);
     res.json({
       chapter: { id: chapter.id, number: chapter.number, title: chapter.title },
-      facts: await getChapterFacts(db, chapter.id),
+      facts,
+      timeline: buildTimeline(chapter.text, facts),
       flags: await listFlags(db, chapter.bookId, chapter.id),
     });
   });

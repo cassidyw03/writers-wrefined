@@ -51,9 +51,20 @@ export type Flag = {
   earlierFact: FlagFact
 }
 
+// One event in a chapter's timeline (FR13), in the order it happens in the text.
+export type TimelineEntry = {
+  id: string
+  subject: string
+  value: string
+  quote: string
+  // False when the quote is not in the text, so its place in the order is a guess.
+  quoteFound: boolean
+}
+
 export type ChapterResult = {
   chapter: { id: string; number: number; title: string | null }
   facts: Fact[]
+  timeline: TimelineEntry[]
   flags: Flag[]
   stats?: { model: string; inputTokens: number; outputTokens: number; seconds: number }
   // Only right after adding a chapter. Null when the check could not run.

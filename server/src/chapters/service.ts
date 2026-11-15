@@ -6,6 +6,7 @@ import { books, chapters, events, facts, flags } from "../db/schema.js";
 import { appendEvent } from "../events/store.js";
 import { factText, type Embedder } from "../embeddings/embed.js";
 import { quoteFound, type Extractor } from "../extraction/extract.js";
+import { buildTimeline } from "../timeline/timeline.js";
 
 const FIRST_BOOK_TITLE = "My book";
 
@@ -141,9 +142,11 @@ export async function addChapter(
       ? await checkFacts(db, check, { bookId, chapterId: chapter.id, chapterNumber, text: input.text }, saved, vectors)
       : null;
 
+  const chapterFacts = await getChapterFacts(db, chapter.id);
   return {
     chapter: { id: chapter.id, number: chapter.number, title: chapter.title },
-    facts: await getChapterFacts(db, chapter.id),
+    facts: chapterFacts,
+    timeline: buildTimeline(input.text, chapterFacts),
     flags: await listFlags(db, bookId, chapter.id),
     check: checkStats,
     stats: {

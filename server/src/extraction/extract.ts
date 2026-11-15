@@ -56,8 +56,14 @@ export function createClaudeExtractor(model = process.env.EXTRACTION_MODEL ?? DE
 // Quote marks and _italics_ underscores are ignored so curly vs straight quotes don't count as a mismatch.
 const normalize = (s: string) => s.replace(/[“”"‘’'_]/g, "").replace(/\s+/g, " ").trim();
 
-// True when the fact's quote really appears in the chapter (catches invented quotes).
+// Where the fact's quote starts in the chapter (after the same clean-up on both), or -1 if it is not there.
 // Punctuation at the end of the quote is ignored, since Claude sometimes ends a partial sentence with a period.
+export function quotePosition(chapterText: string, quote: string): number {
+  const needle = normalize(quote).replace(/[.,;:!?—-]+$/, "");
+  return needle ? normalize(chapterText).indexOf(needle) : -1;
+}
+
+// True when the fact's quote really appears in the chapter (catches invented quotes).
 export function quoteFound(chapterText: string, quote: string): boolean {
-  return normalize(chapterText).includes(normalize(quote).replace(/[.,;:!?—-]+$/, ""));
+  return quotePosition(chapterText, quote) >= 0;
 }
