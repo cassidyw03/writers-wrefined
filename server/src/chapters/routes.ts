@@ -155,7 +155,7 @@ export function chapterRoutes(db: Db, extract: Extractor, embed?: Embedder, chec
     res.json({ flag });
   });
 
-  // Earlier facts most similar to this one. Groundwork for the continuity checker; empty until facts have vectors.
+  // Earlier facts most similar to this one (FR7), shown under each fact card. Empty for facts without a vector.
   router.get("/facts/:id/related", async (req, res) => {
     const parsed = z.uuid().safeParse(req.params.id);
     res.json({ related: parsed.success ? await findRelatedFacts(db, parsed.data, res.locals.user.id) : [] });

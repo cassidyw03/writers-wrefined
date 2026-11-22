@@ -94,6 +94,12 @@ export const createBook = (title: string) =>
 
 export const getChapter = (id: string) => request<ChapterResult>(`/api/chapters/${id}`)
 
+// A fact from an earlier chapter, with how close it is in meaning: 1 is the same, about 0.4 is unrelated (FR7).
+export type RelatedFact = FlagFact & { similarity: number }
+
+export const getRelatedFacts = (factId: string) =>
+  request<{ related: RelatedFact[] }>(`/api/facts/${factId}/related`).then((r) => r.related)
+
 export type NewChapter = { title?: string; text: string; sourceFormat: 'paste' | 'docx' | 'md' }
 
 export const addChapter = (bookId: string, chapter: NewChapter) =>

@@ -253,7 +253,7 @@ function ResultTabs({ result }: { result: ChapterResult }) {
           Timeline ({result.timeline.length})
         </button>
       </div>
-      {tab === 'facts' ? <FactList facts={result.facts} /> : <Timeline entries={result.timeline} />}
+      {tab === 'facts' ? <FactList facts={result.facts} chapterNumber={result.chapter.number} /> : <Timeline entries={result.timeline} />}
     </>
   )
 }

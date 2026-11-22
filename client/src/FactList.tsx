@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import type { Fact, FactType } from './api'
+import { RelatedFacts } from './RelatedFacts'
 
 const FILTERS: (FactType | 'all')[] = ['all', 'attribute', 'relationship', 'event', 'knowledge']
 
-export function FactList({ facts }: { facts: Fact[] }) {
+// chapterNumber decides whether there are earlier chapters to find related facts in.
+export function FactList({ facts, chapterNumber }: { facts: Fact[]; chapterNumber: number }) {
   const [filter, setFilter] = useState<FactType | 'all'>('all')
   const shown = filter === 'all' ? facts : facts.filter((f) => f.type === filter)
 
@@ -31,6 +33,7 @@ export function FactList({ facts }: { facts: Fact[] }) {
             </p>
             <blockquote>“{fact.quote}”</blockquote>
             {!fact.quoteFound && <p className="warn">This quote was not found word for word in the chapter.</p>}
+            {chapterNumber > 1 && <RelatedFacts factId={fact.id} />}
           </li>
         ))}
       </ul>
