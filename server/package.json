@@ -14,7 +14,8 @@
     "db:migrate": "tsx --env-file-if-exists=../.env src/db/migrate.ts",
     "db:studio": "drizzle-kit studio",
     "db:clear-test-data": "tsx --env-file-if-exists=../.env src/db/clear-test-data-cli.ts",
-    "extract": "tsx --env-file-if-exists=../.env src/extraction/extract-cli.ts"
+    "extract": "tsx --env-file-if-exists=../.env src/extraction/extract-cli.ts",
+    "eval": "tsx --env-file-if-exists=../.env src/eval/run-manuscript.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

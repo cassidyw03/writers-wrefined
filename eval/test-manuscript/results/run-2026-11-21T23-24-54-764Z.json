@@ -1,0 +1,1561 @@
+{
+  "ranAt": "2026-11-21T23:24:54.764Z",
+  "chapters": [
+    {
+      "file": "ch1.md",
+      "number": 1,
+      "facts": [
+        {
+          "type": "attribute",
+          "subject": "Veyle",
+          "attribute": "setting",
+          "value": "a port city on the eastern coast of the kingdom; the harbor turns brass-colored at sunrise",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren Ashby",
+          "attribute": "age",
+          "value": "nineteen years old",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren Ashby",
+          "attribute": "occupation",
+          "value": "courier for the Harbor Guild, paid two coppers a letter",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Wren Ashby",
+          "attribute": "employee of",
+          "value": "Harbor Guild",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren Ashby",
+          "attribute": "hair color",
+          "value": "red",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren Ashby",
+          "attribute": "eye color",
+          "value": "grey",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren Ashby",
+          "attribute": "handedness",
+          "value": "left-handed",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren's dagger",
+          "attribute": "appearance",
+          "value": "bone handle carved with a leaping fish",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren Ashby",
+          "attribute": "event",
+          "value": "received her father's dagger the week before his boat sank",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren's father",
+          "attribute": "status",
+          "value": "dead, drowned when his boat went down in a spring storm",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren's mother",
+          "attribute": "status",
+          "value": "dead, died of the river fever when Wren was six years old",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Mira Ashby",
+          "attribute": "event",
+          "value": "raised Wren after both their parents died",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Mira Ashby",
+          "attribute": "sister of",
+          "value": "Wren Ashby",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Mira Ashby",
+          "attribute": "occupation",
+          "value": "healer on Tallow Street who treats sailors who cannot pay",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Mira Ashby",
+          "attribute": "located in",
+          "value": "Tallow Street",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Soot",
+          "attribute": "appearance",
+          "value": "fat grey tom with one torn ear",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Soot",
+          "attribute": "ownership",
+          "value": "belongs to nobody, sleeps wherever he likes",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Soot",
+          "attribute": "pet of",
+          "value": "Wren Ashby",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Soot",
+          "attribute": "pet of",
+          "value": "Mira Ashby",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren Ashby",
+          "attribute": "event",
+          "value": "delivers a letter sealed with the governor's seal to Captain Orrin Vael",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Lady Seraphine Dorr",
+          "attribute": "seal",
+          "value": "a silver wave on black wax",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Lady Seraphine Dorr",
+          "attribute": "occupation",
+          "value": "governor of Veyle for eleven years",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Lady Seraphine Dorr",
+          "attribute": "appearance",
+          "value": "tall woman with silver hair worn in a crown of braids",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin Vael",
+          "attribute": "age",
+          "value": "sixty years old",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin Vael",
+          "attribute": "appearance",
+          "value": "white beard, brown creased face",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin Vael",
+          "attribute": "appearance",
+          "value": "lost his left leg below the knee to a shark off the Teeth thirty years ago, walks on a wooden peg",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "The Teeth",
+          "attribute": "setting",
+          "value": "where Orrin Vael lost his leg to a shark thirty years ago",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin Vael",
+          "attribute": "status",
+          "value": "retired smuggler, no longer a pirate",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Orrin Vael",
+          "attribute": "captain of",
+          "value": "Gull's Lament",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Gull's Lament",
+          "attribute": "appearance",
+          "value": "old ship with patched sails and a carved gull on her prow whose paint had mostly peeled away",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Gull's Lament",
+          "attribute": "location",
+          "value": "tied up at the end of the long pier, where the water was deepest",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Salt Crown",
+          "attribute": "event",
+          "value": "stolen from the governor's vault three nights ago",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Salt Crown",
+          "attribute": "description",
+          "value": "the oldest treasure in Veyle",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Salt Crown",
+          "attribute": "custom",
+          "value": "kept in the vault beneath the governor's hall, worn once a year on Founding Day by the governor to bless the fishing fleet",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Salt Crown",
+          "attribute": "appearance",
+          "value": "shining",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Lady Seraphine Dorr",
+          "attribute": "knows",
+          "value": "the Salt Crown was stolen and wants it found before the Council learns",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Wren Ashby",
+          "attribute": "learns",
+          "value": "the Salt Crown was stolen from the governor's vault",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Orrin Vael",
+          "attribute": "event",
+          "value": "recruits Wren Ashby to help find the stolen Salt Crown",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Wren Ashby",
+          "attribute": "does not know",
+          "value": "the contents of letters she delivers",
+          "quoteFound": true
+        }
+      ],
+      "check": {
+        "pairsChecked": 0,
+        "flagsRaised": 0,
+        "stateChanges": 0
+      },
+      "stats": {
+        "model": "claude-sonnet-5",
+        "inputTokens": 3881,
+        "outputTokens": 11419,
+        "seconds": 96
+      },
+      "seconds": 98
+    },
+    {
+      "file": "ch2.md",
+      "number": 2,
+      "facts": [
+        {
+          "type": "attribute",
+          "subject": "Drowned Library",
+          "attribute": "setting",
+          "value": "under the harbor",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Veyle",
+          "attribute": "event",
+          "value": "the old city flooded before the sea wall was built",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Lantern Order",
+          "attribute": "owns",
+          "value": "Drowned Library",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Lantern Order",
+          "attribute": "also known as",
+          "value": "named for the lanterns hung on hooks in the library",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Brother Edric",
+          "attribute": "occupation",
+          "value": "keeper of maps for the Lantern Order",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Brother Edric",
+          "attribute": "eye color",
+          "value": "pale and clouded",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Brother Edric",
+          "attribute": "status",
+          "value": "blind since birth",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Brother Edric",
+          "attribute": "appearance",
+          "value": "thin old man in a grey robe",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Wren",
+          "attribute": "sister of",
+          "value": "Mira",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "eye color",
+          "value": "green",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Mira",
+          "attribute": "event",
+          "value": "set Brother Edric's wrist last winter",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Mira",
+          "attribute": "age",
+          "value": "three years younger than Wren",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Salt Crown",
+          "attribute": "appearance",
+          "value": "a circlet of plain silver, set with three pearls",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Salt Crown",
+          "attribute": "history",
+          "value": "made for the first queen of the coast, four hundred years ago",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Salt Crown",
+          "attribute": "significance",
+          "value": "whoever wears it on Founding Day speaks for the city",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Salt Crown",
+          "attribute": "event",
+          "value": "stolen from the governor",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Tobias Fenn",
+          "attribute": "age",
+          "value": "fourteen",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Tobias Fenn",
+          "attribute": "appearance",
+          "value": "skinny and sharp-faced",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Tobias Fenn",
+          "attribute": "member of",
+          "value": "pickpockets of the fish market",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Tobias Fenn",
+          "attribute": "event",
+          "value": "was seen near the governor's hall the night the crown was stolen",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Tobias Fenn",
+          "attribute": "knows",
+          "value": "who took the Salt Crown",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Tobias Fenn",
+          "attribute": "event",
+          "value": "steals Wren's father's dagger and throws it into the harbor",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "father's dagger",
+          "attribute": "appearance",
+          "value": "bone-handled",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "father's dagger",
+          "attribute": "event",
+          "value": "lost forever in the harbor",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Gull's Lament",
+          "attribute": "appearance",
+          "value": "a two-masted ketch, small and quick",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Orrin",
+          "attribute": "captain of",
+          "value": "Gull's Lament",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Orrin",
+          "attribute": "event",
+          "value": "leads Wren to the Drowned Library to meet Brother Edric",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "occupation",
+          "value": "courier",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "also known as",
+          "value": "Wren Ashby",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Soot",
+          "attribute": "personality",
+          "value": "aloof, sleeping in her lap is the closest thing to sympathy he ever offers",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren",
+          "attribute": "event",
+          "value": "buys a new knife to replace her father's lost dagger",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "new knife",
+          "attribute": "appearance",
+          "value": "plain steel with a handle of brown horn",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Founding Day",
+          "attribute": "setting",
+          "value": "six weeks away",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Brother Edric",
+          "attribute": "knows",
+          "value": "a man with a heavy chest left Veyle by fishing boat four nights ago, bound north of the sea wall",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Brother Edric",
+          "attribute": "knows",
+          "value": "someone who might know more about the stolen crown",
+          "quoteFound": true
+        }
+      ],
+      "check": {
+        "pairsChecked": 36,
+        "flagsRaised": 3,
+        "stateChanges": 1
+      },
+      "stats": {
+        "model": "claude-sonnet-5",
+        "inputTokens": 3824,
+        "outputTokens": 7817,
+        "seconds": 68.5
+      },
+      "seconds": 105
+    },
+    {
+      "file": "ch3.md",
+      "number": 3,
+      "facts": [
+        {
+          "type": "attribute",
+          "subject": "Tobias Fenn",
+          "attribute": "age",
+          "value": "sixteen",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Tobias Fenn",
+          "attribute": "event",
+          "value": "was present in the drains under the governor's hall during the robbery",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Tobias Fenn",
+          "attribute": "knows",
+          "value": "the Grey Hand took a sailcloth-wrapped box to the Pass",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Grey Hand",
+          "attribute": "occupation",
+          "value": "smugglers, once; then something worse",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Grey Hand",
+          "attribute": "event",
+          "value": "three members robbed the governor's hall through the old drains and took a box to the Pass",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin",
+          "attribute": "age",
+          "value": "sixty",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin",
+          "attribute": "status",
+          "value": "former smuggler",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin",
+          "attribute": "appearance",
+          "value": "missing right leg, uses a wooden peg",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Orrin",
+          "attribute": "owner of",
+          "value": "Gull's Lament",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Orrin",
+          "attribute": "knows",
+          "value": "the name Grey Hand from twenty years ago",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Orrin",
+          "attribute": "suspects",
+          "value": "Haskett framed Lady Seraphine to become governor and wants to wear the Salt Crown on Founding Day",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "occupation",
+          "value": "courier",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "appearance",
+          "value": "carries a new knife with a horn handle, previously had one with a bone handle",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Wren",
+          "attribute": "suspects",
+          "value": "Haskett knows she carried the governor's letter",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Lady Seraphine Dorr",
+          "attribute": "appearance",
+          "value": "tall, silver hair in a crown of braids",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Lady Seraphine Dorr",
+          "attribute": "status",
+          "value": "removed from office as governor, arrested",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Lady Seraphine Dorr",
+          "attribute": "event",
+          "value": "arrested on accusation of selling the Salt Crown to pay her debts",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Lord Aldous Haskett",
+          "attribute": "appearance",
+          "value": "short, round, wears a velvet coat and a gold chain",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Lord Aldous Haskett",
+          "attribute": "owner of",
+          "value": "half the warehouses on the waterfront",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Lord Aldous Haskett",
+          "attribute": "event",
+          "value": "named acting governor of Veyle by the Council",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Salt Crown",
+          "attribute": "event",
+          "value": "discovered missing from the governor's hall",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Mira",
+          "attribute": "occupation",
+          "value": "healer at the infirmary",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Mira",
+          "attribute": "event",
+          "value": "questioned by Haskett's guards about Wren",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Mira",
+          "attribute": "knows",
+          "value": "told Haskett's guards that Wren is a courier who's never home",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Edric",
+          "attribute": "occupation",
+          "value": "keeper of maps consulted for the journey",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Gull's Lament",
+          "attribute": "appearance",
+          "value": "three masts, hold deeper than it looks from the pier",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Kestrel Pass",
+          "attribute": "setting",
+          "value": "the only road through the mountains, rough and empty land inhabited by goat herders and outlaws",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Kestrel Pass",
+          "attribute": "two days' ride north of",
+          "value": "Veyle",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "governor's hall",
+          "attribute": "setting",
+          "value": "has old drains running underneath it",
+          "quoteFound": true
+        }
+      ],
+      "check": {
+        "pairsChecked": 39,
+        "flagsRaised": 3,
+        "stateChanges": 2
+      },
+      "stats": {
+        "model": "claude-sonnet-5",
+        "inputTokens": 3845,
+        "outputTokens": 4067,
+        "seconds": 33
+      },
+      "seconds": 78
+    },
+    {
+      "file": "ch4.md",
+      "number": 4,
+      "facts": [
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "hair color",
+          "value": "red (before dyeing)",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren",
+          "attribute": "event",
+          "value": "dyes her hair black with walnut hulls and iron salts to hide from guards",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "hair color",
+          "value": "black, as black as tar",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "hair length",
+          "value": "cut short at the jaw",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Haskett",
+          "attribute": "event",
+          "value": "sends guards to Tallow Street with a drawing of Wren's face",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Haskett",
+          "attribute": "enemy of",
+          "value": "Wren",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren",
+          "attribute": "event",
+          "value": "is accused of helping Lady Seraphine sell the crown, with a ten silver reward offered",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Lady Seraphine",
+          "attribute": "accused with",
+          "value": "Wren",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Tobias",
+          "attribute": "friend of",
+          "value": "Wren",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Tobias",
+          "attribute": "event",
+          "value": "warns Wren about the wanted poster and reward",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Mira",
+          "attribute": "occupation",
+          "value": "healer who dyes bandages at the infirmary",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Mira",
+          "attribute": "friend of",
+          "value": "Wren",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Soot",
+          "attribute": "personality",
+          "value": "disapproving",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Brother Edric",
+          "attribute": "located in",
+          "value": "Drowned Library",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Brother Edric",
+          "attribute": "eyesight",
+          "value": "blind, reads maps by touch",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin",
+          "attribute": "appearance",
+          "value": "has a peg leg",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin",
+          "attribute": "appearance",
+          "value": "white eyebrows",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Veyle",
+          "attribute": "setting",
+          "value": "the westernmost port in the kingdom, on the western coast where the sun sets over the harbor",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "the Pass",
+          "attribute": "setting",
+          "value": "has an old watchtower at its top, formerly a Grey Hand hideout",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Grey Hand",
+          "attribute": "located in",
+          "value": "the Pass",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Grey Hand",
+          "attribute": "event",
+          "value": "was burned out of their watchtower hideout by the King's men",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "King's men",
+          "attribute": "enemy of",
+          "value": "Grey Hand",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "the crown",
+          "attribute": "appearance",
+          "value": "a plain silver circlet set with seven small, yellowed pearls, one for each of the seven old provinces of the coast",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren",
+          "attribute": "event",
+          "value": "plans to leave at dawn with Orrin and Tobias for the Pass",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Tobias",
+          "attribute": "travels with",
+          "value": "Orrin",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Wren",
+          "attribute": "daughter of",
+          "value": "Wren's mother",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren's mother",
+          "attribute": "occupation",
+          "value": "keeps a bakery in Hollowmere",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Hollowmere",
+          "attribute": "setting",
+          "value": "three days inland",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Wren's mother",
+          "attribute": "does not know",
+          "value": "about the crown or the quest to find it",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren",
+          "attribute": "event",
+          "value": "writes a letter to her mother saying she is well and traveling for the Guild",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Wren",
+          "attribute": "member of",
+          "value": "the Guild",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Tallow Street",
+          "attribute": "setting",
+          "value": "where Wren lives, reached through back alleys near the rope walk",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren",
+          "attribute": "event",
+          "value": "passes two of Haskett's guards unrecognized due to her disguise",
+          "quoteFound": true
+        }
+      ],
+      "check": {
+        "pairsChecked": 54,
+        "flagsRaised": 3,
+        "stateChanges": 1
+      },
+      "stats": {
+        "model": "claude-sonnet-5",
+        "inputTokens": 3568,
+        "outputTokens": 8245,
+        "seconds": 74.4
+      },
+      "seconds": 136
+    },
+    {
+      "file": "ch5.md",
+      "number": 5,
+      "facts": [
+        {
+          "type": "event",
+          "subject": "Haskett",
+          "attribute": "event",
+          "value": "orders the harbor mouth chained, blocking ships without the governor's seal",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Haskett",
+          "attribute": "occupation",
+          "value": "governor of Veyle",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin",
+          "attribute": "appearance",
+          "value": "has a wooden peg leg",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "hair color",
+          "value": "black",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "occupation",
+          "value": "courier",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Kestrel Pass",
+          "attribute": "distance from",
+          "value": "Veyle",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Kestrel Pass",
+          "attribute": "setting",
+          "value": "named for the kestrels that hang in the wind above it",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "watchtower",
+          "attribute": "setting",
+          "value": "a broken stone ring on a ledge above the road, partly fallen down the cliff",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Grey Hand",
+          "attribute": "symbol",
+          "value": "a grey hand painted on a lantern glass",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "crown",
+          "attribute": "appearance",
+          "value": "dull scratched silver with small yellow pearls",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "crown",
+          "attribute": "inscription",
+          "value": "the word 'home' engraved in old coast script on the inside of the band",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren",
+          "attribute": "event",
+          "value": "recovers the crown from the Grey Hand at the Kestrel Pass watchtower",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Tobias",
+          "attribute": "event",
+          "value": "creates a diversion with a stolen tin whistle and rocks to lure away two Grey Hand guards",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren",
+          "attribute": "event",
+          "value": "throws her knife to knock the crossbow off aim before the guard can shoot her",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "weapon",
+          "value": "horn-handled knife",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Wren",
+          "attribute": "dominant hand",
+          "value": "right-handed",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "Wren",
+          "attribute": "taught by",
+          "value": "her father",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Orrin",
+          "attribute": "event",
+          "value": "knocks out the last Grey Hand guard with a piece of firewood",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Orrin",
+          "attribute": "knowledge",
+          "value": "knows a little of the old coast script",
+          "quoteFound": true
+        },
+        {
+          "type": "knowledge",
+          "subject": "Wren",
+          "attribute": "knows",
+          "value": "Haskett is not truly governor until he wears the crown on Founding Day",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Lady Seraphine",
+          "attribute": "status",
+          "value": "imprisoned in a cell under the governor's hall",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Mira",
+          "attribute": "mentioned in connection with",
+          "value": "dye and a drawing on the fish market door",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "bone-handled dagger",
+          "attribute": "location",
+          "value": "bottom of the harbor in forty feet of green-black water",
+          "quoteFound": true
+        },
+        {
+          "type": "relationship",
+          "subject": "bone-handled dagger",
+          "attribute": "owned by",
+          "value": "Wren's father",
+          "quoteFound": true
+        },
+        {
+          "type": "attribute",
+          "subject": "Tobias",
+          "attribute": "personality",
+          "value": "normally complains frequently",
+          "quoteFound": true
+        },
+        {
+          "type": "event",
+          "subject": "Wren",
+          "attribute": "event",
+          "value": "rides back to Veyle with the recovered crown and a captured Grey Hand prisoner",
+          "quoteFound": true
+        }
+      ],
+      "check": {
+        "pairsChecked": 43,
+        "flagsRaised": 2,
+        "stateChanges": 1
+      },
+      "stats": {
+        "model": "claude-sonnet-5",
+        "inputTokens": 3652,
+        "outputTokens": 5688,
+        "seconds": 47.7
+      },
+      "seconds": 124
+    }
+  ],
+  "flags": [
+    {
+      "new": "ch2 Wren / sister of = Mira",
+      "newQuote": "Her little sister Mira was three years younger than Wren, but she had always been the sensible one.",
+      "earlier": "ch1 Mira Ashby / sister of = Wren Ashby",
+      "earlierQuote": "Mira Ashby was Wren's older sister, four years older, and the only healer on Tallow Street who would treat a sailor who could not pay.",
+      "explanation": "Chapter 2 calls Mira Wren's 'little sister' who is three years younger, while chapter 1 explicitly calls Mira the 'older sister' who is four years older, with no explanation for the change."
+    },
+    {
+      "new": "ch2 Wren / eye color = green",
+      "newQuote": "Tobias stared into her green eyes and grinned.",
+      "earlier": "ch1 Wren Ashby / eye color = grey",
+      "earlierQuote": "Wren had red hair that she kept tied back with a strip of sailcloth, and grey eyes that her father used to say were the exact color of a winter sea.",
+      "explanation": "Chapter 2 describes Wren's eyes as green while chapter 1 explicitly describes them as grey, with no explanation given for the change."
+    },
+    {
+      "new": "ch2 Mira / age = three years younger than Wren",
+      "newQuote": "Her little sister Mira was three years younger than Wren, but she had always been the sensible one.",
+      "earlier": "ch1 Mira Ashby / sister of = Wren Ashby",
+      "earlierQuote": "Mira Ashby was Wren's older sister, four years older, and the only healer on Tallow Street who would treat a sailor who could not pay.",
+      "explanation": "Chapter 2 states Mira is three years younger than Wren while chapter 1 states Mira is four years older, an unexplained discrepancy."
+    },
+    {
+      "new": "ch3 Tobias Fenn / age = sixteen",
+      "newQuote": "The sixteen-year-old ate like he had not eaten in days, which Wren suspected was true.",
+      "earlier": "ch2 Tobias Fenn / age = fourteen",
+      "earlierQuote": "He was fourteen years old, skinny and sharp-faced, and he ran with the pickpockets who worked the fish market.",
+      "explanation": "Chapter 3 calls Tobias a sixteen-year-old the very next morning after Chapter 2 established him as fourteen, with no time skip or explanation for the age jump."
+    },
+    {
+      "new": "ch3 Gull's Lament / appearance = three masts, hold deeper than it looks from the pier",
+      "newQuote": "The *Gull's Lament* had three masts, and her hold was deeper than it looked from the pier.",
+      "earlier": "ch2 Gull's Lament / appearance = a two-masted ketch, small and quick",
+      "earlierQuote": "She was a two-masted ketch, small and quick, and Orrin swore she could outrun anything in the harbor if the wind was right.",
+      "explanation": "Chapter 3 describes the Gull's Lament as having three masts while Chapter 2 clearly called her a two-masted ketch, with no explanation for the change."
+    },
+    {
+      "new": "ch3 Orrin / appearance = missing right leg, uses a wooden peg",
+      "newQuote": "He was standing at the rail, leaning his weight on the wooden peg, and he rubbed his thigh above it. The stump of his right leg always ached when the weather was turning.",
+      "earlier": "ch1 Orrin Vael / appearance = lost his left leg below the knee to a shark off the Teeth thirty years ago, walks on a wooden peg",
+      "earlierQuote": "He had lost his left leg below the knee to a shark off the Teeth thirty years ago, and he walked on a wooden peg that thumped on the deck boards.",
+      "explanation": "Chapter 3 says Orrin lost his right leg while Chapter 1 stated he lost his left leg to a shark, with no explanation for the discrepancy."
+    },
+    {
+      "new": "ch4 Veyle / setting = the westernmost port in the kingdom, on the western coast where the sun sets over the harbor",
+      "newQuote": "\"Here is Veyle,\" he said, touching a spot at the edge of the map. \"The westernmost port in the kingdom, here on the western coast where the sun sets over the harbor.\"",
+      "earlier": "ch1 Veyle / setting = a port city on the eastern coast of the kingdom; the harbor turns brass-colored at sunrise",
+      "earlierQuote": "Veyle was a port city on the eastern coast of the kingdom, and every morning the sun rose out of the sea and turned the harbor the color of brass.",
+      "explanation": "Chapter 4 places Veyle on the western coast with sunsets over the harbor, directly contradicting chapter 1's description of Veyle as an eastern coast city where the sun rises over the harbor."
+    },
+    {
+      "new": "ch4 the crown / appearance = a plain silver circlet set with seven small, yellowed pearls, one for each of the seven old provinces of the coast",
+      "newQuote": "\"A plain silver circlet,\" Edric said, \"set with seven pearls, one for each of the seven old provinces of the coast. Small pearls. Yellowed with age. You would walk past it in a market stall and think it was a cheap copy.\"",
+      "earlier": "ch2 Salt Crown / appearance = a circlet of plain silver, set with three pearls",
+      "earlierQuote": "It is a circlet of plain silver, set with three pearls.",
+      "explanation": "Chapter 4 describes the crown as having seven pearls while chapter 2 described it as having only three pearls, with no explanation given for the discrepancy."
+    },
+    {
+      "new": "ch4 Wren / daughter of = Wren's mother",
+      "newQuote": "she thought she ought to write to her mother.",
+      "earlier": "ch1 Wren's mother / status = dead, died of the river fever when Wren was six years old",
+      "earlierQuote": "Their mother had died of the river fever when Wren was six years old, and after their father drowned, Mira had raised her.",
+      "explanation": "Chapter 4 has Wren writing a letter to her living mother in Hollowmere, directly contradicting chapter 1's statement that her mother died of river fever when Wren was six."
+    },
+    {
+      "new": "ch5 Kestrel Pass / distance from = Veyle",
+      "newQuote": "Kestrel Pass was half a day's ride south of Veyle.",
+      "earlier": "ch3 Kestrel Pass / two days' ride north of = Veyle",
+      "earlierQuote": "Kestrel Pass was the only road through the mountains, two days' ride north of Veyle, where the coast road climbed into the high country.",
+      "explanation": "Chapter 5 places Kestrel Pass half a day south of Veyle while chapter 3 placed it two days north of Veyle, with no explanation for the change in direction or distance."
+    },
+    {
+      "new": "ch5 Wren / dominant hand = right-handed",
+      "newQuote": "Wren had always been right-handed, and her right hand was quick and sure.",
+      "earlier": "ch1 Wren Ashby / handedness = left-handed",
+      "earlierQuote": "She was left-handed, and she wore her father's dagger on her right hip so that her left hand could reach it across her body.",
+      "explanation": "Chapter 1 states Wren is left-handed, but chapter 5 explicitly says she has 'always been right-handed' with no explanation for the change."
+    }
+  ],
+  "stateChanges": [
+    {
+      "new": "ch2 Wren / event = buys a new knife to replace her father's lost dagger",
+      "earlier": "ch1 Wren Ashby / event = received her father's dagger the week before his boat sank",
+      "reason": "Chapter 2 shows Wren buying a replacement knife specifically because her father's original dagger (from chapter 1) was lost in the harbor earlier in the same chapter."
+    },
+    {
+      "new": "ch3 Lady Seraphine Dorr / status = removed from office as governor, arrested",
+      "earlier": "ch1 Lady Seraphine Dorr / occupation = governor of Veyle for eleven years",
+      "reason": "Chapter 3 explicitly shows Seraphine being removed from the governorship she held in Chapter 1, with the narrative explaining the change."
+    },
+    {
+      "new": "ch3 Lord Aldous Haskett / event = named acting governor of Veyle by the Council",
+      "earlier": "ch1 Lady Seraphine Dorr / occupation = governor of Veyle for eleven years",
+      "reason": "Chapter 3 explicitly explains that Haskett replaces Seraphine as governor due to her removal from office, accounting for the change from Chapter 1."
+    },
+    {
+      "new": "ch4 Wren / hair color = black, as black as tar",
+      "earlier": "ch1 Wren Ashby / hair color = red",
+      "reason": "Wren's hair turning black in chapter 4 is explicitly explained by Mira's dye job, a deliberate change from her red hair in chapter 1."
+    },
+    {
+      "new": "ch5 Haskett / occupation = governor of Veyle",
+      "earlier": "ch1 Lady Seraphine Dorr / occupation = governor of Veyle for eleven years",
+      "reason": "Chapter 3 shows Haskett being named acting governor, explaining why chapter 5 refers to him as governor instead of Lady Seraphine as in chapter 1."
+    }
+  ],
+  "worldState": {
+    "chapter2": [
+      {
+        "name": "Lady Seraphine Dorr",
+        "details": [
+          "appearance = tall woman with silver hair worn in a crown of braids (ch1)",
+          "occupation = governor of Veyle for eleven years (ch1)",
+          "seal = a silver wave on black wax (ch1)",
+          "knows = the Salt Crown was stolen and wants it found before the Council learns (ch1)"
+        ]
+      },
+      {
+        "name": "Wren",
+        "details": [
+          "also known as = Wren Ashby (ch2)",
+          "eye color = green (ch2)",
+          "occupation = courier (ch2)",
+          "sister of = Mira (ch2)"
+        ]
+      },
+      {
+        "name": "Wren Ashby",
+        "details": [
+          "age = nineteen years old (ch1)",
+          "eye color = grey (ch1)",
+          "hair color = red (ch1)",
+          "handedness = left-handed (ch1)",
+          "occupation = courier for the Harbor Guild, paid two coppers a letter (ch1)",
+          "employee of = Harbor Guild (ch1)",
+          "does not know = the contents of letters she delivers (ch1)",
+          "learns = the Salt Crown was stolen from the governor's vault (ch1)"
+        ]
+      },
+      {
+        "name": "Wren's father",
+        "details": [
+          "status = dead, drowned when his boat went down in a spring storm (ch1)"
+        ]
+      },
+      {
+        "name": "Wren's mother",
+        "details": [
+          "status = dead, died of the river fever when Wren was six years old (ch1)"
+        ]
+      },
+      {
+        "name": "Veyle",
+        "details": [
+          "setting = a port city on the eastern coast of the kingdom; the harbor turns brass-colored at sunrise (ch1)"
+        ]
+      },
+      {
+        "name": "Wren's dagger",
+        "details": [
+          "appearance = bone handle carved with a leaping fish (ch1)"
+        ]
+      }
+    ],
+    "chapter3": [
+      {
+        "name": "Lady Seraphine Dorr",
+        "details": [
+          "appearance = tall, silver hair in a crown of braids (ch3)",
+          "seal = a silver wave on black wax (ch1)",
+          "status = removed from office as governor, arrested (ch3) [changed]",
+          "knows = the Salt Crown was stolen and wants it found before the Council learns (ch1)"
+        ]
+      },
+      {
+        "name": "Lord Aldous Haskett",
+        "details": [
+          "appearance = short, round, wears a velvet coat and a gold chain (ch3)",
+          "owner of = half the warehouses on the waterfront (ch3)"
+        ]
+      },
+      {
+        "name": "Wren",
+        "details": [
+          "also known as = Wren Ashby (ch2)",
+          "appearance = carries a new knife with a horn handle, previously had one with a bone handle (ch3)",
+          "eye color = green (ch2)",
+          "occupation = courier (ch3)",
+          "sister of = Mira (ch2)",
+          "suspects = Haskett knows she carried the governor's letter (ch3)"
+        ]
+      },
+      {
+        "name": "Wren Ashby",
+        "details": [
+          "age = nineteen years old (ch1)",
+          "eye color = grey (ch1)",
+          "hair color = red (ch1)",
+          "handedness = left-handed (ch1)",
+          "occupation = courier for the Harbor Guild, paid two coppers a letter (ch1)",
+          "employee of = Harbor Guild (ch1)",
+          "does not know = the contents of letters she delivers (ch1)",
+          "learns = the Salt Crown was stolen from the governor's vault (ch1)"
+        ]
+      },
+      {
+        "name": "Wren's father",
+        "details": [
+          "status = dead, drowned when his boat went down in a spring storm (ch1)"
+        ]
+      },
+      {
+        "name": "Wren's mother",
+        "details": [
+          "status = dead, died of the river fever when Wren was six years old (ch1)"
+        ]
+      },
+      {
+        "name": "governor's hall",
+        "details": [
+          "setting = has old drains running underneath it (ch3)"
+        ]
+      },
+      {
+        "name": "Veyle",
+        "details": [
+          "setting = a port city on the eastern coast of the kingdom; the harbor turns brass-colored at sunrise (ch1)"
+        ]
+      },
+      {
+        "name": "Wren's dagger",
+        "details": [
+          "appearance = bone handle carved with a leaping fish (ch1)"
+        ]
+      }
+    ],
+    "chapter5": [
+      {
+        "name": "Haskett",
+        "details": [
+          "occupation = governor of Veyle (ch5) [changed]",
+          "enemy of = Wren (ch4)"
+        ]
+      },
+      {
+        "name": "Lady Seraphine",
+        "details": [
+          "status = imprisoned in a cell under the governor's hall (ch5)",
+          "accused with = Wren (ch4)"
+        ]
+      },
+      {
+        "name": "Lady Seraphine Dorr",
+        "details": [
+          "appearance = tall, silver hair in a crown of braids (ch3)",
+          "seal = a silver wave on black wax (ch1)",
+          "status = removed from office as governor, arrested (ch3) [changed]",
+          "knows = the Salt Crown was stolen and wants it found before the Council learns (ch1)"
+        ]
+      },
+      {
+        "name": "Lord Aldous Haskett",
+        "details": [
+          "appearance = short, round, wears a velvet coat and a gold chain (ch3)",
+          "owner of = half the warehouses on the waterfront (ch3)"
+        ]
+      },
+      {
+        "name": "Wren",
+        "details": [
+          "also known as = Wren Ashby (ch2)",
+          "appearance = carries a new knife with a horn handle, previously had one with a bone handle (ch3)",
+          "dominant hand = right-handed (ch5)",
+          "eye color = green (ch2)",
+          "hair color = black (ch5)",
+          "hair length = cut short at the jaw (ch4)",
+          "occupation = courier (ch5)",
+          "weapon = horn-handled knife (ch5)",
+          "daughter of = Wren's mother (ch4)",
+          "member of = the Guild (ch4)",
+          "sister of = Mira (ch2)",
+          "taught by = her father (ch5)",
+          "knows = Haskett is not truly governor until he wears the crown on Founding Day (ch5)",
+          "suspects = Haskett knows she carried the governor's letter (ch3)"
+        ]
+      },
+      {
+        "name": "Wren Ashby",
+        "details": [
+          "age = nineteen years old (ch1)",
+          "eye color = grey (ch1)",
+          "handedness = left-handed (ch1)",
+          "occupation = courier for the Harbor Guild, paid two coppers a letter (ch1)",
+          "employee of = Harbor Guild (ch1)",
+          "does not know = the contents of letters she delivers (ch1)",
+          "learns = the Salt Crown was stolen from the governor's vault (ch1)"
+        ]
+      },
+      {
+        "name": "Wren's father",
+        "details": [
+          "status = dead, drowned when his boat went down in a spring storm (ch1)"
+        ]
+      },
+      {
+        "name": "Wren's mother",
+        "details": [
+          "occupation = keeps a bakery in Hollowmere (ch4)",
+          "status = dead, died of the river fever when Wren was six years old (ch1)",
+          "does not know = about the crown or the quest to find it (ch4)"
+        ]
+      },
+      {
+        "name": "governor's hall",
+        "details": [
+          "setting = has old drains running underneath it (ch3)"
+        ]
+      },
+      {
+        "name": "Veyle",
+        "details": [
+          "setting = the westernmost port in the kingdom, on the western coast where the sun sets over the harbor (ch4)"
+        ]
+      },
+      {
+        "name": "Wren's dagger",
+        "details": [
+          "appearance = bone handle carved with a leaping fish (ch1)"
+        ]
+      }
+    ]
+  }
+}
