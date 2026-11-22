@@ -37,7 +37,7 @@ export function WorldStateView({ bookId, chapterCount }: { bookId: string; chapt
   const subjects = (state?.subjects ?? []).filter(
     (s) =>
       !query ||
-      s.name.toLowerCase().includes(query) ||
+      [s.name, ...s.aliases].some((n) => n.toLowerCase().includes(query)) ||
       s.details.some((d) => `${d.attribute} ${d.value}`.toLowerCase().includes(query)),
   )
   const kinds = (Object.keys(KIND_LABEL) as WorldSubject['kind'][]).filter((k) => subjects.some((s) => s.kind === k))
@@ -92,6 +92,7 @@ function SubjectCard({ subject }: { subject: WorldSubject }) {
   return (
     <li className="world-subject">
       <h4>{subject.name}</h4>
+      {subject.aliases.length > 0 && <p className="muted world-aliases">Also called {subject.aliases.join(', ')}</p>}
       <ul className="world-details">
         {subject.details.map((d) => (
           <DetailRow key={d.factId} detail={d} />

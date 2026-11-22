@@ -1,4 +1,5 @@
 import type { StoredEvent } from "../events/store.js";
+import { groupAliases } from "./aliases.js";
 
 // World state as of chapter N (FR12): what is true about every subject after chapters 1 to N, built by replaying
 // the book's events in story order. Nothing here reads the facts table; the events are the source of truth.
@@ -12,6 +13,7 @@ import type { StoredEvent } from "../events/store.js";
 // - StateChanged: the new fact is an explained change. It replaces the earlier fact even when the attributes are
 //   named differently ("hair" vs "hair color").
 // - FlagRaised / FlagResolved: the flag is attached to the newer fact, with its latest status.
+// Names that mean the same subject ("Wren" and "Wren Ashby") are merged first; see aliases.ts.
 
 export type FactType = "attribute" | "relationship" | "event" | "knowledge";
 export type SubjectKind = "character" | "place" | "object" | "group";
@@ -32,7 +34,9 @@ export type WorldDetail = {
 };
 
 export type WorldSubject = {
+  // The fullest name the book uses; aliases are the other names merged into it ("Wren" for "Wren Ashby").
   name: string;
+  aliases: string[];
   kind: SubjectKind;
   details: WorldDetail[];
 };
@@ -89,7 +93,17 @@ export function replayWorldState(
     .filter((e) => e.chapterId && !replaced.has(e.chapterId) && (chapterNumbers.get(e.chapterId) ?? Infinity) <= chapterNumber)
     .sort((a, b) => chapterNumbers.get(a.chapterId!)! - chapterNumbers.get(b.chapterId!)! || a.sequence - b.sequence);
 
-  const subjects = new Map<string, { name: string; kind: SubjectKind; details: Map<string, WorldDetail> }>();
+  // Group the names Claude used for the same subject. Built from the whole book, not just chapters 1 to N, so a
+  // subject keeps the same name at every chapter.
+  const bookFacts = events
+    .filter((e) => e.type === "FactExtracted" && e.chapterId && !replaced.has(e.chapterId))
+    .map((e) => (e.data as FactData).fact);
+  const aliases = groupAliases(
+    bookFacts.map((f) => ({ name: f.subject, kind: f.subject_kind })),
+    bookFacts.filter((f) => f.type === "attribute" && norm(f.attribute) === "also known as").map((f) => ({ subject: f.subject, alias: f.value })),
+  );
+
+  const subjects = new Map<string, { name: string; aliases: string[]; kind: SubjectKind; details: Map<string, WorldDetail> }>();
   // Where each fact currently lives, so StateChanged and FlagRaised can find it.
   const factHome = new Map<string, { subject: string; key: string }>();
   const facts = new Map<string, { value: string; chapterNumber: number }>();
@@ -108,9 +122,14 @@ export function replayWorldState(
       facts.set(e.id, { value: fact.value, chapterNumber: n });
       if (fact.type === "event") continue;
 
-      const subjectKey = norm(fact.subject);
-      const subject = subjects.get(subjectKey) ?? { name: fact.subject, kind: fact.subject_kind, details: new Map() };
-      subject.name = fact.subject;
+      const subjectKey = aliases.keyOf(fact.subject);
+      const shown = aliases.displayOf(subjectKey);
+      const subject = subjects.get(subjectKey) ?? {
+        name: shown?.name ?? fact.subject,
+        aliases: shown?.aliases ?? [],
+        kind: fact.subject_kind,
+        details: new Map(),
+      };
       subjects.set(subjectKey, subject);
 
       const key = detailKey(fact.type, fact.attribute, fact.value);
@@ -179,6 +198,7 @@ export function replayWorldState(
       .filter((s) => s.details.size > 0)
       .map((s) => ({
         name: s.name,
+        aliases: s.aliases,
         kind: s.kind,
         details: [...s.details.values()].sort(
           (a, b) =>

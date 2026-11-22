@@ -116,6 +116,8 @@ export type WorldDetail = {
 
 export type WorldSubject = {
   name: string
+  // Other names the book uses for this subject, merged into it on the server.
+  aliases: string[]
   kind: 'character' | 'place' | 'object' | 'group'
   details: WorldDetail[]
 }
